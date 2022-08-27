@@ -6,7 +6,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serial;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -18,13 +17,13 @@ import java.io.Serializable;
 @Table(name = "fonctions")
 @Where(clause = "active <> 'N'")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Fonctions implements Serializable {
+public class Fonctions extends AbstractEntity<Long> {
     @Serial
    static final long serialVersionUID = 8828858818361258181L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
    String code;
-    @Column
-   String libCode;
    String libDesc;
    String type;
    String url;

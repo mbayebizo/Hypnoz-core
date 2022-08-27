@@ -2,13 +2,11 @@ package net.hypnoz.core.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import net.hypnoz.core.emus.TypeEntreprise;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.io.Serial;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "groupes")
@@ -21,7 +19,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = "{id}")
 @Builder
 @SQLDelete(sql = "UPDATE groupes SET flag_etat = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
-public class Groupes extends AbstractEntity {
+public class Groupes extends AbstractEntity<Long> {
     @Serial
     static final long serialVersionUID = 1L;
     @Id

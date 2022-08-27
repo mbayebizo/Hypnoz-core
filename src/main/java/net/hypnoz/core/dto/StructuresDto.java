@@ -1,37 +1,36 @@
-package net.hypnoz.core.models;
+package net.hypnoz.core.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import net.hypnoz.core.annotation.CheckDate;
+import net.hypnoz.core.annotation.CheckEmail;
+import net.hypnoz.core.annotation.CheckMobile;
 import net.hypnoz.core.emus.TypeEntreprise;
 
-import javax.persistence.*;
 import java.io.Serial;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "structures")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor()
+@ApiModel("Structure Dto")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(of = "{id}")
 @Builder
-public  class Structures extends AbstractEntity<Long>{
+@ToString
+@EqualsAndHashCode
+public class StructuresDto extends AbstractDto<Long> {
     @Serial
-     static final long serialVersionUID = -563840516246290525L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long serialVersionUID = 5570157676629231277L;
     Long id;
     String raisonSocial;
     String sigle;
-    @Lob
     String description;
     String zoneFiscale;
     String zoneFiscale2;
+    @CheckDate
     LocalDate dateFiscale;
-    @Enumerated(EnumType.STRING)
     TypeEntreprise typeEntreprise;
     String bilanSocail;
     String formJuridique;
@@ -39,14 +38,15 @@ public  class Structures extends AbstractEntity<Long>{
     String ville;
     String departement;
     String pays;
+    @CheckMobile
     String telephone;
+    @CheckEmail
     String email;
     String siteweb;
-    @Lob
     String logo;
-    private String activiteCommerciale;
-    private String responsable;
-    private String qualiteResponsable;
-    private String capital;
-
+    String activiteCommerciale;
+    String responsable;
+    String qualiteResponsable;
+    String capital;
+    
 }

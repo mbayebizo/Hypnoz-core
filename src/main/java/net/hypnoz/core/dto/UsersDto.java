@@ -1,24 +1,27 @@
-package net.hypnoz.core.models;
+package net.hypnoz.core.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import net.hypnoz.core.annotation.CheckDate;
+import net.hypnoz.core.models.Groupes;
 
-import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serial;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "users")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor()
+@ApiModel("User Dto")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(of = "{id}")
 @Builder
-public class Users extends AbstractEntity<Long>{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@ToString
+@EqualsAndHashCode
+public class UsersDto extends AbstractDto<Long> {
+    @Serial
+    static final long serialVersionUID = -2251460200601550695L;
     Long id;
     String civilite;
     String nom;
@@ -26,6 +29,7 @@ public class Users extends AbstractEntity<Long>{
     String patronyme;
     String codeSecret;
     int connexion;
+    @CheckDate
     LocalDate dateNaissance;
     String langue;
     String adresse;
@@ -34,18 +38,16 @@ public class Users extends AbstractEntity<Long>{
     String telBureau;
     String telDomicile;
     String cel;
+    @CheckDate
     LocalDate lastLog;
+    @CheckDate
     LocalDate firstLog;
     String photo;
     String signature;
-    @Column
+    @Size(max = 255)
     String login;
-    @Column
+    @Size(max = 255)
     String pwd;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "grp_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("groupes_id")
     Groupes groupes;
+    
 }
