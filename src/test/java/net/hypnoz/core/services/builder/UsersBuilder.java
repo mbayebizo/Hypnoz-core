@@ -1,7 +1,8 @@
 package net.hypnoz.core.services.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import net.hypnoz.core.dto.UsersDto;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UsersBuilder {
@@ -10,8 +11,6 @@ public class UsersBuilder {
     }
 
     public static UsersDto getDto() {
-        UsersDto dto = new UsersDto();
-        dto.setId("1");
-        return dto;
+        return UsersDto.builder().build();
     }
 }

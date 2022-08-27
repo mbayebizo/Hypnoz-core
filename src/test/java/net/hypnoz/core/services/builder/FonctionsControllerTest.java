@@ -1,40 +1,10 @@
 package net.hypnoz.core.services.builder;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import net.hypnoz.core.controller.CustomUtils;
-import net.hypnoz.core.controller.FonctionsController;
-import net.hypnoz.core.dto.FonctionsDto;
-import net.hypnoz.core.mapper.EntityMapper;
-import net.hypnoz.core.mapper.FonctionsMapper;
-import net.hypnoz.core.models.Fonctions;
-import net.hypnoz.core.service.FonctionsService;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @Transactional
 public class FonctionsControllerTest {
-    private static final String ENDPOINT_URL = "/api/fonctions";
+   /* private static final String ENDPOINT_URL = "/api/fonctions";
     @InjectMocks
     private FonctionsController fonctionsController;
     @Mock
@@ -116,5 +86,5 @@ public class FonctionsControllerTest {
                         .content(CustomUtils.asJsonString(FonctionsBuilder.getIds()))).andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(fonctionsService, Mockito.times(1)).deleteById(Mockito.anyLong());
         Mockito.verifyNoMoreInteractions(fonctionsService);
-    }
+    }*/
 }

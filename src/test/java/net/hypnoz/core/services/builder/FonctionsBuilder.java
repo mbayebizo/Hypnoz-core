@@ -1,7 +1,8 @@
 package net.hypnoz.core.services.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import net.hypnoz.core.dto.FonctionsDto;
 
+import java.util.Collections;
 import java.util.List;
 
 public class FonctionsBuilder {
@@ -10,8 +11,7 @@ public class FonctionsBuilder {
     }
 
     public static FonctionsDto getDto() {
-        FonctionsDto dto = new FonctionsDto();
-        dto.setId("1");
-        return dto;
+        return FonctionsDto.builder().build();
+
     }
 }

@@ -11,8 +11,6 @@ public class ApplicationsBuilder {
     }
 
     public static ApplicationsDto getDto() {
-        ApplicationsDto dto = new ApplicationsDto();
-        dto.setId("1");
-        return dto;
+        return  ApplicationsDto.builder().build();
     }
 }
