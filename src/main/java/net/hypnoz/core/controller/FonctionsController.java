@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RequestMapping("/fonctions")
 @RestController
 @Slf4j
@@ -40,12 +38,13 @@ public class FonctionsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        Optional.ofNullable(fonctionsService.findById(id)).orElseThrow(() -> {
+        try{
+            fonctionsService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }catch (ResourceNotFoundException e){
             log.error("Unable to delete non-existent data！");
-            return new ResourceNotFoundException();
-        });
-        fonctionsService.deleteById(id);
-        return ResponseEntity.ok().build();
+            throw new ResourceNotFoundException();
+        }
     }
 
     @GetMapping("/page-query")

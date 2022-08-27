@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RequestMapping("/users")
 @RestController
 @Slf4j
@@ -41,12 +39,13 @@ public class UsersController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        Optional.ofNullable(usersService.findById(id)).orElseThrow(() -> {
+        try {
+            usersService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException e) {
             log.error("Unable to delete non-existent data！");
-            return new ResourceNotFoundException();
-        });
-        usersService.deleteById(id);
-        return ResponseEntity.ok().build();
+            throw new ResourceNotFoundException();
+        }
     }
 
     @GetMapping("/page-query")
