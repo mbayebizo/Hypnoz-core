@@ -4,23 +4,23 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Where(clause = "active <> 'N'")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Applications implements Serializable {
+public class Applications extends AbstractEntity<Long> {
     static final long serialVersionUID = 2657700055123057816L;
-
     @Id
-    String code;
-    @Column
-    String libCode;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     String libDesc;
     String url;
     String iconClass;
@@ -28,9 +28,9 @@ public class Applications implements Serializable {
     String active;
     int ordre;
 
-    @PrePersist
-    public void beforePersist() {
+    @Override
+    public void beforePrePersit() {
+        super.beforePrePersit();
         this.active = "Y";
     }
-
 }

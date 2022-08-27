@@ -22,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity implements Serializable, Comparable<AbstractEntity> {
+public class AbstractEntity<E> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @CreatedBy
@@ -50,13 +50,4 @@ public class AbstractEntity implements Serializable, Comparable<AbstractEntity> 
     public void beforeRemove(){
         this.flagEtat=Etats.DELETED;
     }
-    @Override
-    public int compareTo(AbstractEntity o) {
-        if (createdDate == null || o.createdDate == null) {
-            return 0;
-        }
-        return createdDate.compareTo(o.getCreatedDate());
-
-    }
 }
-

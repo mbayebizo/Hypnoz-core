@@ -6,7 +6,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serial;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "modules")
@@ -17,11 +16,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
-public class Modules implements Serializable {
+public class Modules extends AbstractEntity<Long> {
     @Serial
-    static final long serialVersionUID = -5256511258001979964L;
+    static final long serialVersionUID = -8557507909072700306L;
     @Id
-    @Column(name = "code", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     String code;
     String libCode;
     String libDesc;
