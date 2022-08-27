@@ -112,20 +112,7 @@ class StructuresServiceTest {
         // Verify the results
     }
 
-    @Test
-    void testFindByCondition_StructuresRepositoryReturnsNoItems() {
-        // Setup
-        final StructuresDto structuresDto = StructuresDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-        when(mockStructuresMapper.toDto(List.of(Structures.builder().build())))
-                .thenReturn(List.of(StructuresDto.builder().build()));
 
-        // Run the test
-        final Page<StructuresDto> result = structuresServiceUnderTest.findByCondition(structuresDto,
-                PageRequest.of(0, 1));
-
-        // Verify the results
-    }
 
     @Test
     void testFindByCondition_StructuresMapperReturnsNoItems() {

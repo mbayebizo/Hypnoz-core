@@ -106,18 +106,6 @@ class UsersServiceTest {
         // Verify the results
     }
 
-    @Test
-    void testFindByCondition_UsersRepositoryReturnsNoItems() {
-        // Setup
-        final UsersDto usersDto = UsersDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-        when(mockUsersMapper.toDto(List.of(Users.builder().build()))).thenReturn(List.of(UsersDto.builder().build()));
-
-        // Run the test
-        final Page<UsersDto> result = usersServiceUnderTest.findByCondition(usersDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
 
     @Test
     void testFindByCondition_UsersMapperReturnsNoItems() {

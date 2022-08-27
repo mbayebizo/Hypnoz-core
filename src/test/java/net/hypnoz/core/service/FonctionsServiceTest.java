@@ -89,54 +89,8 @@ class FonctionsServiceTest {
         assertThatThrownBy(() -> fonctionsServiceUnderTest.findById(0L)).isInstanceOf(ResourceNotFoundException.class);
     }
 
-    @Test
-    void testFindByCondition() {
-        // Setup
-        final FonctionsDto fonctionsDto = FonctionsDto.builder().build();
 
-        // Configure FonctionsRepository.findAll(...).
-        final Page<Fonctions> fonctions = new PageImpl<>(List.of(Fonctions.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(fonctions);
 
-        when(mockFonctionsMapper.toDto(List.of(Fonctions.builder().build())))
-                .thenReturn(List.of(FonctionsDto.builder().build()));
-
-        // Run the test
-        final Page<FonctionsDto> result = fonctionsServiceUnderTest.findByCondition(fonctionsDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_FonctionsRepositoryReturnsNoItems() {
-        // Setup
-        final FonctionsDto fonctionsDto = FonctionsDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-        when(mockFonctionsMapper.toDto(List.of(Fonctions.builder().build())))
-                .thenReturn(List.of(FonctionsDto.builder().build()));
-
-        // Run the test
-        final Page<FonctionsDto> result = fonctionsServiceUnderTest.findByCondition(fonctionsDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_FonctionsMapperReturnsNoItems() {
-        // Setup
-        final FonctionsDto fonctionsDto = FonctionsDto.builder().build();
-
-        // Configure FonctionsRepository.findAll(...).
-        final Page<Fonctions> fonctions = new PageImpl<>(List.of(Fonctions.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(fonctions);
-
-        when(mockFonctionsMapper.toDto(List.of(Fonctions.builder().build()))).thenReturn(Collections.emptyList());
-
-        // Run the test
-        final Page<FonctionsDto> result = fonctionsServiceUnderTest.findByCondition(fonctionsDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
 
     @Test
     void testUpdate() {

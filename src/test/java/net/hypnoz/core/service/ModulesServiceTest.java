@@ -89,44 +89,7 @@ class ModulesServiceTest {
         assertThatThrownBy(() -> modulesServiceUnderTest.findById(0L)).isInstanceOf(ResourceNotFoundException.class);
     }
 
-    @Test
-    void testFindByCondition() {
-        // Setup
-        final ModulesDto modulesDto = ModulesDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(new Modules())));
-        when(mockModulesMapper.toDto(List.of(new Modules()))).thenReturn(List.of(ModulesDto.builder().build()));
 
-        // Run the test
-        final Page<ModulesDto> result = modulesServiceUnderTest.findByCondition(modulesDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_ModulesRepositoryReturnsNoItems() {
-        // Setup
-        final ModulesDto modulesDto = ModulesDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-        when(mockModulesMapper.toDto(List.of(new Modules()))).thenReturn(List.of(ModulesDto.builder().build()));
-
-        // Run the test
-        final Page<ModulesDto> result = modulesServiceUnderTest.findByCondition(modulesDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_ModulesMapperReturnsNoItems() {
-        // Setup
-        final ModulesDto modulesDto = ModulesDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(new Modules())));
-        when(mockModulesMapper.toDto(List.of(new Modules()))).thenReturn(Collections.emptyList());
-
-        // Run the test
-        final Page<ModulesDto> result = modulesServiceUnderTest.findByCondition(modulesDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
 
     @Test
     void testUpdate() {

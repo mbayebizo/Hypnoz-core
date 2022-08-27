@@ -107,19 +107,7 @@ class GroupesServiceTest {
         // Verify the results
     }
 
-    @Test
-    void testFindByCondition_GroupesRepositoryReturnsNoItems() {
-        // Setup
-        final GroupesDto groupesDto = GroupesDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-        when(mockGroupesMapper.toDto(List.of(Groupes.builder().build())))
-                .thenReturn(List.of(GroupesDto.builder().build()));
 
-        // Run the test
-        final Page<GroupesDto> result = groupesServiceUnderTest.findByCondition(groupesDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
 
     @Test
     void testFindByCondition_GroupesMapperReturnsNoItems() {

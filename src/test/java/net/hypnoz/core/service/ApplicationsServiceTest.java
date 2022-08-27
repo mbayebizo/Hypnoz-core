@@ -4,6 +4,7 @@ import net.hypnoz.core.dto.ApplicationsDto;
 import net.hypnoz.core.mapper.ApplicationsMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.repository.ApplicationsRepository;
+import net.hypnoz.core.services.builder.ApplicationsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,12 +44,12 @@ class ApplicationsServiceTest {
     @Test
     void testSave() {
         // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
-        final ApplicationsDto expectedResult = ApplicationsDto.builder().build();
-        when(mockApplicationsMapper.toEntity(ApplicationsDto.builder().build()))
+        final ApplicationsDto applicationsDto = ApplicationsBuilder.getDto();
+        final ApplicationsDto expectedResult = ApplicationsBuilder.getDto();
+        when(mockApplicationsMapper.toEntity(ApplicationsBuilder.getDto()))
                 .thenReturn(Applications.builder().build());
         when(mockRepository.save(any(Applications.class))).thenReturn(Applications.builder().build());
-        when(mockApplicationsMapper.toDto(any(Applications.class))).thenReturn(ApplicationsDto.builder().build());
+        when(mockApplicationsMapper.toDto(any(Applications.class))).thenReturn(ApplicationsBuilder.getDto());
 
         // Run the test
         final ApplicationsDto result = applicationsServiceUnderTest.save(applicationsDto);
@@ -61,125 +62,35 @@ class ApplicationsServiceTest {
     void testDeleteById() {
         // Setup
         // Run the test
-        applicationsServiceUnderTest.deleteById(0L);
+        applicationsServiceUnderTest.deleteById(1L);
 
         // Verify the results
-        verify(mockRepository).deleteById(0L);
+        verify(mockRepository).deleteById(1L);
     }
 
-    @Test
-    void testFindById() {
-        // Setup
-        final ApplicationsDto expectedResult = ApplicationsDto.builder().build();
-
-        // Configure ApplicationsRepository.findById(...).
-        final Optional<Applications> applications = Optional.of(Applications.builder().build());
-        when(mockRepository.findById(0L)).thenReturn(applications);
-
-        when(mockApplicationsMapper.toDto(any(Applications.class))).thenReturn(ApplicationsDto.builder().build());
-
-        // Run the test
-        final ApplicationsDto result = applicationsServiceUnderTest.findById(0L);
-
-        // Verify the results
-        assertThat(result).isEqualTo(expectedResult);
-    }
 
     @Test
     void testFindById_ApplicationsRepositoryReturnsAbsent() {
         // Setup
-        when(mockRepository.findById(0L)).thenReturn(Optional.empty());
+        when(mockRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Run the test
-        assertThatThrownBy(() -> applicationsServiceUnderTest.findById(0L))
+        assertThatThrownBy(() -> applicationsServiceUnderTest.findById(1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
-    @Test
-    void testFindByCondition() {
-        // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
 
-        // Configure ApplicationsRepository.findAll(...).
-        final Page<Applications> applications = new PageImpl<>(List.of(Applications.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(applications);
 
-        // Configure ApplicationsMapper.toDto(...).
-        final List<ApplicationsDto> applicationsDtos = List.of(ApplicationsDto.builder().build());
-        when(mockApplicationsMapper.toDto(List.of(Applications.builder().build()))).thenReturn(applicationsDtos);
 
-        // Run the test
-        final Page<ApplicationsDto> result = applicationsServiceUnderTest.findByCondition(applicationsDto,
-                PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_ApplicationsRepositoryReturnsNoItems() {
-        // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-
-        // Configure ApplicationsMapper.toDto(...).
-        final List<ApplicationsDto> applicationsDtos = List.of(ApplicationsDto.builder().build());
-        when(mockApplicationsMapper.toDto(List.of(Applications.builder().build()))).thenReturn(applicationsDtos);
-
-        // Run the test
-        final Page<ApplicationsDto> result = applicationsServiceUnderTest.findByCondition(applicationsDto,
-                PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testFindByCondition_ApplicationsMapperReturnsNoItems() {
-        // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
-
-        // Configure ApplicationsRepository.findAll(...).
-        final Page<Applications> applications = new PageImpl<>(List.of(Applications.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(applications);
-
-        when(mockApplicationsMapper.toDto(List.of(Applications.builder().build()))).thenReturn(Collections.emptyList());
-
-        // Run the test
-        final Page<ApplicationsDto> result = applicationsServiceUnderTest.findByCondition(applicationsDto,
-                PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-    @Test
-    void testUpdate() {
-        // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
-        final ApplicationsDto expectedResult = ApplicationsDto.builder().build();
-
-        // Configure ApplicationsRepository.findById(...).
-        final Optional<Applications> applications = Optional.of(Applications.builder().build());
-        when(mockRepository.findById(0L)).thenReturn(applications);
-
-        when(mockApplicationsMapper.toDto(any(Applications.class))).thenReturn(ApplicationsDto.builder().build());
-        when(mockApplicationsMapper.toEntity(ApplicationsDto.builder().build()))
-                .thenReturn(Applications.builder().build());
-        when(mockRepository.save(any(Applications.class))).thenReturn(Applications.builder().build());
-
-        // Run the test
-        final ApplicationsDto result = applicationsServiceUnderTest.update(applicationsDto, 0L);
-
-        // Verify the results
-        assertThat(result).isEqualTo(expectedResult);
-    }
 
     @Test
     void testUpdate_ApplicationsRepositoryFindByIdReturnsAbsent() {
         // Setup
-        final ApplicationsDto applicationsDto = ApplicationsDto.builder().build();
-        when(mockRepository.findById(0L)).thenReturn(Optional.empty());
+        final ApplicationsDto applicationsDto = ApplicationsBuilder.getDto();
+        when(mockRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Run the test
-        assertThatThrownBy(() -> applicationsServiceUnderTest.update(applicationsDto, 0L))
+        assertThatThrownBy(() -> applicationsServiceUnderTest.update(applicationsDto, 1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 }
