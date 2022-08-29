@@ -8,6 +8,7 @@ import net.hypnoz.core.annotation.CheckEmail;
 import net.hypnoz.core.annotation.CheckMobile;
 import net.hypnoz.core.emus.TypeEntreprise;
 
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 

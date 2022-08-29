@@ -26,9 +26,9 @@ public class StructuresController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Validated StructuresDto structuresDto) {
-        structuresService.save(structuresDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<StructuresDto> save(@RequestBody @Validated StructuresDto structuresDto) {
+       var response= structuresService.save(structuresDto);
+        return response;
     }
 
     @GetMapping("/{id}")
