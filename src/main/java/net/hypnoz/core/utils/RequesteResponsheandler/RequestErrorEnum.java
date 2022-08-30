@@ -11,7 +11,9 @@ import java.util.Arrays;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum RequestErrorEnum {
     ERROR_SIGLE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"sigle.error" ,"sigle.error.description" ),
-    ERROR_RAISON_SOCIAL(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(), "raison.social.error", "raison.social.error.description");
+    ERROR_RAISON_SOCIAL(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(), "raison.social.error", "raison.social.error.description"),
+    ERROR_INSERT_OR_UPDATE_IN_DATABASE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(), "raison.social.error", "raison.social.error.description"),
+    ;
     HttpStatus httpStatus;
     String errorCode;
     String errorMessage;

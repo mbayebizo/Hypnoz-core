@@ -2,6 +2,8 @@ package net.hypnoz.core.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.StructuresDto;
+import net.hypnoz.core.dto.pojo.StructureInitPojo;
+import net.hypnoz.core.emus.TypeEntreprise;
 import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
@@ -64,5 +66,23 @@ public class StructuresService {
         Structures entity = structuresMapper.toEntity(structuresDto);
         BeanUtils.copyProperties(data, entity);
         return save(structuresMapper.toDto(entity)).getBody();
+    }
+
+    public ResponseEntity<Void> initConfigStructure(StructureInitPojo structureInitPojo){
+        createStruncture(structureInitPojo);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void createStruncture(StructureInitPojo structureInitPojo) {
+        StructuresDto structuresDto = StructuresDto.builder()
+                .sigle(structureInitPojo.getSigle())
+                .raisonSocial(structureInitPojo.getRaisonSocial())
+                .typeEntreprise(TypeEntreprise.valueOf(structureInitPojo.getTypeEntreprise()))
+                .dateFiscale(structureInitPojo.getDateFiscale())
+                .build();
+
+        save(structuresDto);
+
     }
 }

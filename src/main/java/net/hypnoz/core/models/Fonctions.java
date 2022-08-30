@@ -2,6 +2,8 @@ package net.hypnoz.core.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -28,16 +30,20 @@ public class Fonctions extends AbstractEntity<Long> {
    String type;
    String url;
    String iconClass;
-   String actions;
    String application;
-   String module;
    String active;
    int ordre;
    boolean used;
-
-    @PrePersist
-    public void beforePersist() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
+            insertable = false, updatable = false)
+    @MapsId("applicationsId")
+    private Applications applications;
+    @Override
+    public void beforePrePersit() {
+        super.beforePrePersit();
         this.active = "Y";
+        this.used=true;
     }
-
 }

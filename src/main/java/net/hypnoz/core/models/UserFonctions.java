@@ -10,23 +10,23 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "users_groupes", indexes = {
-        @Index(name = "idx_usergroupes_unq", columnList = "groupes_id, users_id", unique = true)
+@Table(name = "users_fonctions", indexes = {
+        @Index(name = "idx_userfonctions_unq", columnList = "fonctions_id, users_id", unique = true)
 })
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserGroupes implements Persistable<UserGroupes.UserGroupesPK> {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserFonctions implements Persistable<UserFonctions.UserFonctionsPK> {
     @EmbeddedId
-    private UserGroupesPK id;
+    private UserFonctionsPK id;
     @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "grp_fk", value = ConstraintMode.NO_CONSTRAINT),
+    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
             insertable = false, updatable = false)
-    @MapsId("groupesId")
-    private Groupes groupes;
+    @MapsId("fonctionsId")
+    private Fonctions fonctions;
 
     @ManyToOne(fetch =FetchType.EAGER )
     @NotFound(action = NotFoundAction.IGNORE)
@@ -56,10 +56,10 @@ public class UserGroupes implements Persistable<UserGroupes.UserGroupesPK> {
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class UserGroupesPK implements Serializable{
+    public static class UserFonctionsPK implements Serializable{
         @Serial
-        private static final long serialVersionUID = 4736343511565176307L;
-        private  Long groupesId;
+        private static final long serialVersionUID = 4836078017561062725L;
+        private  Long fonctionsId;
         private Long usersId;
     }
 

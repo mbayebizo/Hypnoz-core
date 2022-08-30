@@ -2,12 +2,12 @@ package net.hypnoz.core.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 @Getter
 @Setter
 @Entity
@@ -28,6 +28,12 @@ public class Applications extends AbstractEntity<Long> {
     String active;
     int ordre;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
+            insertable = false, updatable = false)
+    @MapsId("modulesId")
+    private Modules modules;
     @Override
     public void beforePrePersit() {
         super.beforePrePersit();

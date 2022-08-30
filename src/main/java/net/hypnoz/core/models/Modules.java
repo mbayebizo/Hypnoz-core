@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "modules")
@@ -26,20 +27,22 @@ public class Modules extends AbstractEntity<Long> {
     String libCode;
     String libDesc;
     String version;
-    String versionDate;
+    LocalDate versionDate;
     String url;
     String iconClass;
     String active;
+    int standart;
     int ordre;
-
-    @PrePersist
-    public void beforePersist() {
-        this.active = "Y";
-    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "str_fk", value = ConstraintMode.NO_CONSTRAINT),
             insertable = false, updatable = false)
     @MapsId("structuresId")
     Structures structures;
+
+    @Override
+    public void beforePrePersit() {
+        super.beforePrePersit();
+        this.active = "Y";
+    }
 }
