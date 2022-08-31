@@ -1,0 +1,82 @@
+[
+  {
+    "code": "M0",
+    "libCode": "Administration",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 0
+  },
+  {
+    "code": "M1",
+    "libCode": "Compabitlité",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M2",
+    "libCode": "Gestion commerciale",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M3",
+    "libCode": "Trésorerie",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M4",
+    "libCode": "Paie & RH",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M5",
+    "libCode": "Immobilisation",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M6",
+    "libCode": "Etats financiers",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M7",
+    "libCode": "Parcs",
+    "libDesc": "",
+    "version": "0.0.1",
+    "versionDate": "01/01/2022",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  }
+]
