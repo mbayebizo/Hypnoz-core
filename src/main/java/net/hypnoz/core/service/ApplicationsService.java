@@ -12,7 +12,6 @@ import net.hypnoz.core.repository.ApplicationsRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -34,8 +33,8 @@ public class ApplicationsService {
     private final ApplicationsRepository repository;
     private final ApplicationsMapper applicationsMapper;
 
-    @Value("${application-url}")
-    private String applicationUrl;
+    /*@Value("${application-url}")
+    private String applicationUrl;*/
     public ApplicationsService(ApplicationsRepository repository, ApplicationsMapper applicationsMapper) {
         this.repository = repository;
         this.applicationsMapper = applicationsMapper;
@@ -69,7 +68,7 @@ public class ApplicationsService {
 
     public List<ApplicationsDto> initApplication(Modules modules){
         try {
-            Resource resource = new ClassPathResource(applicationUrl);
+            Resource resource = new ClassPathResource("config/Applications.json");
             ObjectMapper objectMapper = new ObjectMapper();
             TypeReference<List<ApplicationsDto>> typeReference = new TypeReference<List<ApplicationsDto>>(){};
             List<ApplicationsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);

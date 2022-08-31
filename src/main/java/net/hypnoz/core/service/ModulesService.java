@@ -13,7 +13,6 @@ import net.hypnoz.core.repository.StructuresRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -35,8 +34,8 @@ public class ModulesService {
     private final ModulesMapper modulesMapper;
     private final StructuresRepository structuresRepository;
 
-    @Value("${module-url}")
-    private String moduleUrl;
+   /* @Value("${module-url}")
+    private String moduleUrl;*/
 
     public ModulesService(ModulesRepository repository, ModulesMapper modulesMapper, StructuresRepository structuresRepository) {
         this.repository = repository;
@@ -72,7 +71,7 @@ public class ModulesService {
 
     public List<ModulesDto> initializeOrAddtModule(Structures structures){
         try {
-                Resource resource = new ClassPathResource(moduleUrl);
+                Resource resource = new ClassPathResource("config/modules.json");
                 ObjectMapper objectMapper = new ObjectMapper();
                 TypeReference<List<ModulesDto>> typeReference = new TypeReference<List<ModulesDto>>(){};
                 List<ModulesDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);

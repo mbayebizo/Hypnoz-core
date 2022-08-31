@@ -12,7 +12,6 @@ import net.hypnoz.core.repository.FonctionsRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -33,8 +32,8 @@ import java.util.stream.Collectors;
 public class FonctionsService {
     private final FonctionsRepository repository;
     private final FonctionsMapper fonctionsMapper;
-    @Value("${fonction-url}")
-    private String fonctionUrl;
+   /* @Value("${fonction-url}")
+    private String fonctionUrl;*/
 
     public FonctionsService(FonctionsRepository repository, FonctionsMapper fonctionsMapper) {
         this.repository = repository;
@@ -69,7 +68,7 @@ public class FonctionsService {
 
     public List<FonctionsDto> initFonction(Applications applications){
         try {
-            Resource resource = new ClassPathResource(fonctionUrl);
+            Resource resource = new ClassPathResource("config/fonctions.json");
             ObjectMapper objectMapper = new ObjectMapper();
             TypeReference<List<FonctionsDto>> typeReference = new TypeReference<List<FonctionsDto>>(){};
             List<FonctionsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
