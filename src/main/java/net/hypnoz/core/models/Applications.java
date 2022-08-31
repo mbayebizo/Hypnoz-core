@@ -21,9 +21,11 @@ public class Applications extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String libDesc;
-    String url;
-    String iconClass;
+    private String code;
+    private String libCode;
+    private String libDesc;
+    private String url;
+    private String iconClass;
     String module;
     String active;
     int ordre;

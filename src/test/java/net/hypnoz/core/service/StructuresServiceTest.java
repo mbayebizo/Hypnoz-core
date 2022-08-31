@@ -1,6 +1,9 @@
 package net.hypnoz.core.service;
 
 import net.hypnoz.core.dto.StructuresDto;
+import net.hypnoz.core.dto.pojo.StructureInitPojo;
+import net.hypnoz.core.mapper.ApplicationsMapper;
+import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,12 +36,22 @@ class StructuresServiceTest {
     private StructuresRepository mockRepository;
     @Mock
     private StructuresMapper mockStructuresMapper;
+    @Mock
+    private ModulesService modulesService;
+    @Mock
+    private  ApplicationsService applicationsService;
+    @Mock
+    private ModulesMapper modulesMapper;
+    @Mock
+    private ApplicationsMapper applicationsMapper;
+    @Mock
+    private FonctionsService fonctionsService;
 
     private StructuresService structuresServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper);
+        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService);
     }
 
     @Test
@@ -204,5 +218,15 @@ class StructuresServiceTest {
         // Run the test
         assertThatThrownBy(() -> structuresServiceUnderTest.update(structuresDto, 1L))
                 .isInstanceOf(ResourceNotFoundException.class);
+    }
+    @Test
+    void testInitModules(){
+        StructureInitPojo structureInitPojo = StructureInitPojo.builder()
+                .sigle("HYPNOZ")
+                .raisonSocial("Hypnoz Test ")
+                .typeEntreprise("SA")
+                .dateFiscale(LocalDate.now())
+                .build();
+        structuresServiceUnderTest.initConfigStructure(structureInitPojo);
     }
 }

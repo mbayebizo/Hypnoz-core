@@ -1,11 +1,20 @@
 package net.hypnoz.core.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.ApplicationsDto;
 import net.hypnoz.core.mapper.ApplicationsMapper;
 import net.hypnoz.core.models.Applications;
+import net.hypnoz.core.models.Modules;
 import net.hypnoz.core.repository.ApplicationsRepository;
+import net.hypnoz.core.utils.FormatText;
+import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
+import net.hypnoz.core.utils.exceptions.ResponseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +22,10 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,6 +34,8 @@ public class ApplicationsService {
     private final ApplicationsRepository repository;
     private final ApplicationsMapper applicationsMapper;
 
+    @Value("${application-url}")
+    private String applicationUrl;
     public ApplicationsService(ApplicationsRepository repository, ApplicationsMapper applicationsMapper) {
         this.repository = repository;
         this.applicationsMapper = applicationsMapper;
@@ -51,5 +65,24 @@ public class ApplicationsService {
         Applications entity = applicationsMapper.toEntity(applicationsDto);
         BeanUtil.copyProperties(data, entity);
         return save(applicationsMapper.toDto(entity));
+    }
+
+    public List<ApplicationsDto> initApplication(Modules modules){
+        try {
+            Resource resource = new ClassPathResource(applicationUrl);
+            ObjectMapper objectMapper = new ObjectMapper();
+            TypeReference<List<ApplicationsDto>> typeReference = new TypeReference<List<ApplicationsDto>>(){};
+            List<ApplicationsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
+            return o.stream().filter(p-> Objects.equals(p.getModule(), modules.getCode())).map(_l->{
+                Applications app = applicationsMapper.toEntity(_l);
+                app.setModule(modules.getCode());
+                app.setModules(modules);
+                app.setLibCode(FormatText.formatCode(_l.getLibCode()));
+                app.setOrdre(FormatText.getOrdre(_l.getCode()));
+                return applicationsMapper.toDto(repository.saveAndFlush(app));
+            }).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE);
+        }
     }
 }

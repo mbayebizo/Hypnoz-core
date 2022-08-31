@@ -17,19 +17,20 @@ import java.io.Serial;
 @EqualsAndHashCode
 public class FonctionsDto extends AbstractDto<Long> {
     @Serial
-     static final long serialVersionUID = 6553296754537262814L;
-     Long id;
-     String code;
-     String libDesc;
-     String type;
-     String url;
-     String iconClass;
-     String actions;
-     String application;
-     String module;
-     String active;
-     int ordre;
-     boolean used;
+    static final long serialVersionUID = 6553296754537262814L;
+    Long id;
+    String code;
+    String libCode;
+    String libDesc;
+    String type;
+    String url;
+    String iconClass;
+    String actions;
+    String application;
+    String module;
+    String active;
+    int ordre;
+    boolean used;
 
 
 }

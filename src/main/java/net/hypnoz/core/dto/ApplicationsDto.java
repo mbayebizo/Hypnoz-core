@@ -17,12 +17,14 @@ import java.io.Serial;
 @EqualsAndHashCode
 public class ApplicationsDto extends AbstractDto<Long> {
     @Serial
-     static final long serialVersionUID = -7308031832373933178L;
-     Long id;
-     String libDesc;
-     String url;
-     String iconClass;
-     String module;
-     String active;
-     int ordre;
+    static final long serialVersionUID = -7308031832373933178L;
+    Long id;
+    String code;
+    String libCode;
+    String libDesc;
+    String url;
+    String iconClass;
+    String module;
+    String active;
+    int ordre;
 }

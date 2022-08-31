@@ -27,6 +27,7 @@ public class ModulesDto extends AbstractDto<Long> {
      String url;
      String iconClass;
      String active;
+     int standart;
      int ordre;
      StructuresDto structures;
 

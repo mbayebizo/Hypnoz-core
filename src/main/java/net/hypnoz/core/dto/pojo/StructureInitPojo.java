@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class StructureInitPojo {
     String raisonSocial;
     String sigle;

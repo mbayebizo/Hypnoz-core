@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.ModulesDto;
 import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.models.Modules;
+import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.ModulesRepository;
 import net.hypnoz.core.repository.StructuresRepository;
 import net.hypnoz.core.utils.FormatText;
@@ -69,23 +70,19 @@ public class ModulesService {
         return save(modulesMapper.toDto(entity));
     }
 
-    public List<ModulesDto> initializeOrAddtModule(long strId){
+    public List<ModulesDto> initializeOrAddtModule(Structures structures){
         try {
-            var s = structuresRepository.findById(strId);
-            if(s.isPresent()){
                 Resource resource = new ClassPathResource(moduleUrl);
                 ObjectMapper objectMapper = new ObjectMapper();
                 TypeReference<List<ModulesDto>> typeReference = new TypeReference<List<ModulesDto>>(){};
                 List<ModulesDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
                 return o.stream().map(_l->{
                     Modules mod = modulesMapper.toEntity(_l);
-                    mod.setStructures(s.get());
+                    mod.setStructures(structures);
                     mod.setLibCode(FormatText.formatCode(_l.getLibCode()));
                     mod.setOrdre(FormatText.getOrdre(_l.getCode()));
                     return modulesMapper.toDto(repository.saveAndFlush(mod));
                 }).collect(Collectors.toList());
-            }
-           return null;
         } catch (IOException e) {
             throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE);
         }
