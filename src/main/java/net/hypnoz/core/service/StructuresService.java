@@ -1,6 +1,7 @@
 package net.hypnoz.core.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.hypnoz.core.dto.ApplicationsDto;
 import net.hypnoz.core.dto.StructuresDto;
 import net.hypnoz.core.dto.pojo.StructureInitPojo;
 import net.hypnoz.core.emus.TypeEntreprise;
@@ -10,6 +11,7 @@ import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
+import net.hypnoz.core.utils.CoreConstance;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +24,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -49,14 +53,14 @@ public class StructuresService {
     public ResponseEntity<StructuresDto> save(StructuresDto structuresDto) {
         validationSigleRaisonSocial(structuresDto);
         Structures entity = structuresMapper.toEntity(structuresDto);
-        return ResponseEntity.ok( structuresMapper.toDto(repository.save(entity)));
+        return ResponseEntity.ok(structuresMapper.toDto(repository.save(entity)));
     }
 
     private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
         if (structuresDto.getSigle().length() < 2 || structuresDto.getSigle().length() > 50) {
             throw new ResponseException(RequestErrorEnum.ERROR_SIGLE);
         }
-        if(structuresDto.getRaisonSocial().length()<2 || structuresDto.getRaisonSocial().length()>150){
+        if (structuresDto.getRaisonSocial().length() < 2 || structuresDto.getRaisonSocial().length() > 150) {
             throw new ResponseException(RequestErrorEnum.ERROR_RAISON_SOCIAL);
         }
     }
@@ -69,12 +73,6 @@ public class StructuresService {
         return structuresMapper.toDto(repository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
-    public Page<StructuresDto> findByCondition(StructuresDto structuresDto, Pageable pageable) {
-        Page<Structures> entityPage = repository.findAll(pageable);
-        List<Structures> entities = entityPage.getContent();
-        return new PageImpl<>(structuresMapper.toDto(entities), pageable, entityPage.getTotalElements());
-    }
-
     public StructuresDto update(StructuresDto structuresDto, Long id) {
         StructuresDto data = findById(id);
         Structures entity = structuresMapper.toEntity(structuresDto);
@@ -82,7 +80,7 @@ public class StructuresService {
         return save(structuresMapper.toDto(entity)).getBody();
     }
 
-    public ResponseEntity<Void> initConfigStructure(StructureInitPojo structureInitPojo){
+    public ResponseEntity<Void> initConfigStructure(StructureInitPojo structureInitPojo) {
         createStruncture(structureInitPojo);
 
         return ResponseEntity.ok().build();
@@ -96,13 +94,14 @@ public class StructuresService {
                 .dateFiscale(structureInitPojo.getDateFiscale())
                 .build();
 
-        var structureResponse=save(structuresDto);
+        var structureResponse = save(structuresDto);
 
         var moduleDTO = modulesService.initializeOrAddtModule(structuresMapper.toEntity(structureResponse.getBody()));
 
-       var applicationDTOs= moduleDTO.stream().filter(modulesDto -> modulesDto.getStandart()==0).map(mod-> applicationsService.initApplication(modulesMapper.toEntity(mod)));
-
-       applicationDTOs.map(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));
+        moduleDTO.stream().filter(m -> m.getStandart() == CoreConstance.STANDART_MODULE).forEach(mod -> {
+            List<ApplicationsDto> applicationsDtos = applicationsService.initApplication(modulesMapper.toEntity(mod));
+            applicationsDtos.forEach(app -> fonctionsService.initFonction(applicationsMapper.toEntity(app)));
+        });
 
     }
 }
