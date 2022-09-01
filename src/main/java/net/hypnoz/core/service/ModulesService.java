@@ -71,7 +71,7 @@ public class ModulesService {
 
     public List<ModulesDto> initializeOrAddtModule(Structures structures){
         try {
-                Resource resource = new ClassPathResource("config/modules.json");
+                Resource resource = new ClassPathResource("config/modules");
                 ObjectMapper objectMapper = new ObjectMapper();
                 TypeReference<List<ModulesDto>> typeReference = new TypeReference<List<ModulesDto>>(){};
                 List<ModulesDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);

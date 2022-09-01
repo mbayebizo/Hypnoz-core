@@ -68,7 +68,7 @@ public class FonctionsService {
 
     public List<FonctionsDto> initFonction(Applications applications){
         try {
-            Resource resource = new ClassPathResource("config/fonctions.json");
+            Resource resource = new ClassPathResource("config/fonctions");
             ObjectMapper objectMapper = new ObjectMapper();
             TypeReference<List<FonctionsDto>> typeReference = new TypeReference<List<FonctionsDto>>(){};
             List<FonctionsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);

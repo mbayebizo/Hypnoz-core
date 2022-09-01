@@ -68,7 +68,7 @@ public class ApplicationsService {
 
     public List<ApplicationsDto> initApplication(Modules modules){
         try {
-            Resource resource = new ClassPathResource("config/Applications.json");
+            Resource resource = new ClassPathResource("config/Applications");
             ObjectMapper objectMapper = new ObjectMapper();
             TypeReference<List<ApplicationsDto>> typeReference = new TypeReference<List<ApplicationsDto>>(){};
             List<ApplicationsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);

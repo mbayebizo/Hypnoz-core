@@ -10,6 +10,7 @@ import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
+import net.hypnoz.core.utils.HypnozCoreConstants;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
 import org.springframework.beans.BeanUtils;
@@ -100,9 +101,11 @@ public class StructuresService {
 
         var moduleDTO = modulesService.initializeOrAddtModule(structuresMapper.toEntity(structureResponse.getBody()));
 
-       var applicationDTOs= moduleDTO.stream().filter(modulesDto -> modulesDto.getStandart()==0).map(mod-> applicationsService.initApplication(modulesMapper.toEntity(mod)));
+       var applicationDTOs= moduleDTO.stream()
+               .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
+               .map(mod-> applicationsService.initApplication(modulesMapper.toEntity(mod)));
 
-       applicationDTOs.map(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));
+       applicationDTOs.forEach(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));
 
     }
 }
