@@ -1,13 +1,13 @@
 package net.hypnoz.core.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.hypnoz.core.dto.ModulesDto;
 import net.hypnoz.core.dto.StructuresDto;
 import net.hypnoz.core.dto.pojo.StructureInitPojo;
 import net.hypnoz.core.emus.TypeEntreprise;
 import net.hypnoz.core.mapper.ApplicationsMapper;
 import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.mapper.StructuresMapper;
-import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
 import net.hypnoz.core.utils.HypnozCoreConstants;
@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,8 +39,9 @@ public class StructuresService {
     private final ModulesMapper modulesMapper;
     private final ApplicationsMapper applicationsMapper;
     private final FonctionsService fonctionsService;
+    private final GroupesService groupesService;
 
-    public StructuresService(StructuresRepository repository, StructuresMapper structuresMapper, ModulesService modulesService, ApplicationsService applicationsService, ModulesMapper modulesMapper, ApplicationsMapper applicationsMapper, FonctionsService fonctionsService) {
+    public StructuresService(StructuresRepository repository, StructuresMapper structuresMapper, ModulesService modulesService, ApplicationsService applicationsService, ModulesMapper modulesMapper, ApplicationsMapper applicationsMapper, FonctionsService fonctionsService, GroupesService groupesService) {
         this.repository = repository;
         this.structuresMapper = structuresMapper;
         this.modulesService = modulesService;
@@ -45,19 +49,20 @@ public class StructuresService {
         this.modulesMapper = modulesMapper;
         this.applicationsMapper = applicationsMapper;
         this.fonctionsService = fonctionsService;
+        this.groupesService = groupesService;
     }
 
     public ResponseEntity<StructuresDto> save(StructuresDto structuresDto) {
         validationSigleRaisonSocial(structuresDto);
         Structures entity = structuresMapper.toEntity(structuresDto);
-        return ResponseEntity.ok( structuresMapper.toDto(repository.save(entity)));
+        return ResponseEntity.ok(structuresMapper.toDto(repository.save(entity)));
     }
 
     private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
         if (structuresDto.getSigle().length() < 2 || structuresDto.getSigle().length() > 50) {
             throw new ResponseException(RequestErrorEnum.ERROR_SIGLE);
         }
-        if(structuresDto.getRaisonSocial().length()<2 || structuresDto.getRaisonSocial().length()>150){
+        if (structuresDto.getRaisonSocial().length() < 2 || structuresDto.getRaisonSocial().length() > 150) {
             throw new ResponseException(RequestErrorEnum.ERROR_RAISON_SOCIAL);
         }
     }
@@ -83,29 +88,53 @@ public class StructuresService {
         return save(structuresMapper.toDto(entity)).getBody();
     }
 
-    public ResponseEntity<Void> initConfigStructure(StructureInitPojo structureInitPojo){
-        createStruncture(structureInitPojo);
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<StructuresDto> initConfigStructure(StructureInitPojo structureInitPojo) {
+        return createStruncture(structureInitPojo);
     }
 
-    private void createStruncture(StructureInitPojo structureInitPojo) {
+    private ResponseEntity<StructuresDto> createStruncture(StructureInitPojo structureInitPojo) {
         StructuresDto structuresDto = StructuresDto.builder()
                 .sigle(structureInitPojo.getSigle())
                 .raisonSocial(structureInitPojo.getRaisonSocial())
-                .typeEntreprise(TypeEntreprise.valueOf(structureInitPojo.getTypeEntreprise()))
-                .dateFiscale(structureInitPojo.getDateFiscale())
+                .typeEntreprise(TypeEntreprise.SA)
+                .dateFiscale(LocalDate.now())
                 .build();
+        ResponseEntity<StructuresDto> structureResponse = null;
+        Optional<Structures> structuresOptional = repository.findBySigleAndRaisonSocial(structuresDto.getSigle(), structuresDto.getRaisonSocial());
+        List<ModulesDto> moduleDTO = new ArrayList<>();
 
-        var structureResponse=save(structuresDto);
+        if (structuresOptional.isPresent()) {
+             modulesService.initializeOrAddtModule(structuresOptional.get())
+                     .stream()
+                     .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
+                     .map(modulesDto -> applicationsService.initApplication(modulesMapper.toEntity(modulesDto))
+                             .stream()
+                             .map(applicationsDto -> fonctionsService.initFonction(applicationsMapper.toEntity(applicationsDto))));
+             structureResponse = ResponseEntity.ok(structuresMapper.toDto(structuresOptional.get()));
+        } else {
+             structureResponse = save(structuresDto);
+            modulesService.initializeOrAddtModule(structuresMapper.toEntity(structureResponse.getBody()))
+                    .stream()
+                    .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
+                    .forEach(modulesDto -> {
+                         applicationsService.initApplication(modulesMapper.toEntity(modulesDto))
+                                .forEach(applicationsDto -> {
+                                    fonctionsService.initFonction(applicationsMapper.toEntity(applicationsDto));
+                                });
 
-        var moduleDTO = modulesService.initializeOrAddtModule(structuresMapper.toEntity(structureResponse.getBody()));
+                    });
+            groupesService.initGroupe(structuresMapper.toEntity(structureResponse.getBody()));
+        }
 
-       var applicationDTOs= moduleDTO.stream()
+   /* List<ApplicationsDto> applicationsDtos= new ArrayList<>();
+     moduleDTO.stream()
                .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
-               .map(mod-> applicationsService.initApplication(modulesMapper.toEntity(mod)));
+               .forEach(mod-> {
+                     applicationsService.initApplication(modulesMapper.toEntity(mod)).stream().map(applicationsDtos::add);
+               });*/
 
-       applicationDTOs.forEach(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));
+       /*applicationDTOs.forEach(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));*/
+        return structureResponse;
 
     }
 }

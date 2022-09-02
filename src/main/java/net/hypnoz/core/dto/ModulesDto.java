@@ -22,8 +22,6 @@ public class ModulesDto extends AbstractDto<Long> {
      String code;
      String libCode;
      String libDesc;
-     String version;
-     String versionDate;
      String url;
      String iconClass;
      String active;

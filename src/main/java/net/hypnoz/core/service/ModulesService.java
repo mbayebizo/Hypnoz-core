@@ -7,9 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.ModulesDto;
 import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.models.Modules;
+import net.hypnoz.core.models.ModulesStructure;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.ModulesRepository;
-import net.hypnoz.core.repository.StructuresRepository;
+import net.hypnoz.core.repository.ModulesStructureRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
@@ -32,15 +33,16 @@ import java.util.stream.Collectors;
 public class ModulesService {
     private final ModulesRepository repository;
     private final ModulesMapper modulesMapper;
-    private final StructuresRepository structuresRepository;
+    private final ModulesStructureRepository modulesStructureRepository;
 
    /* @Value("${module-url}")
     private String moduleUrl;*/
 
-    public ModulesService(ModulesRepository repository, ModulesMapper modulesMapper, StructuresRepository structuresRepository) {
+    public ModulesService(ModulesRepository repository, ModulesMapper modulesMapper,
+                          ModulesStructureRepository modulesStructureRepository) {
         this.repository = repository;
         this.modulesMapper = modulesMapper;
-        this.structuresRepository = structuresRepository;
+        this.modulesStructureRepository = modulesStructureRepository;
     }
 
     public ModulesDto save(ModulesDto modulesDto) {
@@ -71,19 +73,40 @@ public class ModulesService {
 
     public List<ModulesDto> initializeOrAddtModule(Structures structures){
         try {
-                Resource resource = new ClassPathResource("config/modules");
+                Resource resource = new ClassPathResource("config/modules.json");
                 ObjectMapper objectMapper = new ObjectMapper();
                 TypeReference<List<ModulesDto>> typeReference = new TypeReference<List<ModulesDto>>(){};
                 List<ModulesDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
                 return o.stream().map(_l->{
-                    Modules mod = modulesMapper.toEntity(_l);
-                    mod.setStructures(structures);
-                    mod.setLibCode(FormatText.formatCode(_l.getLibCode()));
-                    mod.setOrdre(FormatText.getOrdre(_l.getCode()));
-                    return modulesMapper.toDto(repository.saveAndFlush(mod));
+                    Modules mod = null;
+
+
+                    if (repository.findByCode(_l.getCode()).isEmpty()){
+                        mod = modulesMapper.toEntity(_l);
+                        mod.setLibCode(FormatText.formatCode(_l.getLibCode()));
+                        mod.setOrdre(FormatText.getOrdre(_l.getCode()));
+                        repository.saveAndFlush(mod);
+
+                        ModulesStructure modulesStructure = ModulesStructure.builder()
+                                .id(ModulesStructure.ModulesStructurePK.builder()
+                                        .structuresId(structures.getId())
+                                        .modulesId(mod.getId())
+                                        .build())
+                                .modules(mod)
+                                .structures(structures)
+                                .build();
+
+                        modulesStructureRepository.saveAndFlush(modulesStructure);
+
+                    }else {
+                       mod = repository.findByCode(_l.getCode()).orElse(null);
+                    }
+
+                    return modulesMapper.toDto(mod);
+
                 }).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE);
+            throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE,e);
         }
     }
 }
