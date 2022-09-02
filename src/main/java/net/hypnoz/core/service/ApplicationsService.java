@@ -9,6 +9,7 @@ import net.hypnoz.core.mapper.ApplicationsMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.models.Modules;
 import net.hypnoz.core.repository.ApplicationsRepository;
+import net.hypnoz.core.repository.ModulesRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
@@ -32,12 +33,14 @@ import java.util.stream.Collectors;
 public class ApplicationsService {
     private final ApplicationsRepository repository;
     private final ApplicationsMapper applicationsMapper;
+    private final ModulesRepository modulesRepository;
 
     /*@Value("${application-url}")
     private String applicationUrl;*/
-    public ApplicationsService(ApplicationsRepository repository, ApplicationsMapper applicationsMapper) {
+    public ApplicationsService(ApplicationsRepository repository, ApplicationsMapper applicationsMapper, ModulesRepository modulesRepository) {
         this.repository = repository;
         this.applicationsMapper = applicationsMapper;
+        this.modulesRepository = modulesRepository;
     }
 
     public ApplicationsDto save(ApplicationsDto applicationsDto) {
@@ -67,18 +70,26 @@ public class ApplicationsService {
     }
 
     public List<ApplicationsDto> initApplication(Modules modules){
+        Modules mod = modulesRepository.getReferenceById(modules.getId());
         try {
             Resource resource = new ClassPathResource("config/Applications.json");
             ObjectMapper objectMapper = new ObjectMapper();
             TypeReference<List<ApplicationsDto>> typeReference = new TypeReference<List<ApplicationsDto>>(){};
             List<ApplicationsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
             return o.stream().filter(p-> Objects.equals(p.getModule(), modules.getCode())).map(_l->{
-                Applications app = applicationsMapper.toEntity(_l);
-                app.setModule(modules.getCode());
-                app.setModules(modules);
-                app.setLibCode(FormatText.formatCode(_l.getLibCode()));
-                app.setOrdre(FormatText.getOrdre(_l.getCode()));
-                return applicationsMapper.toDto(repository.saveAndFlush(app));
+                Applications app = null;
+                if(repository.findByCodeAndModule(_l.getCode(),_l.getModule()).isEmpty()){
+                    app = applicationsMapper.toEntity(_l);
+                    app.setModule(modules.getCode());
+                    app.setModules(mod);
+                    app.setLibCode(FormatText.formatCode(_l.getLibCode()));
+                    app.setOrdre(FormatText.getOrdre(_l.getCode()));
+                    repository.saveAndFlush(app);
+                }else{
+                    app =repository.findByCodeAndModule(_l.getCode(),_l.getModule()).orElse(null);
+                }
+
+                return applicationsMapper.toDto(app);
             }).collect(Collectors.toList());
         } catch (IOException e) {
             throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE);

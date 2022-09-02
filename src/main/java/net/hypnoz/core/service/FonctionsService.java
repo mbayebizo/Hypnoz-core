@@ -8,6 +8,7 @@ import net.hypnoz.core.dto.FonctionsDto;
 import net.hypnoz.core.mapper.FonctionsMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.models.Fonctions;
+import net.hypnoz.core.repository.ApplicationsRepository;
 import net.hypnoz.core.repository.FonctionsRepository;
 import net.hypnoz.core.utils.FormatText;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
@@ -32,12 +33,14 @@ import java.util.stream.Collectors;
 public class FonctionsService {
     private final FonctionsRepository repository;
     private final FonctionsMapper fonctionsMapper;
+    private final ApplicationsRepository applicationsRepository;
    /* @Value("${fonction-url}")
     private String fonctionUrl;*/
 
-    public FonctionsService(FonctionsRepository repository, FonctionsMapper fonctionsMapper) {
+    public FonctionsService(FonctionsRepository repository, FonctionsMapper fonctionsMapper, ApplicationsRepository applicationsRepository) {
         this.repository = repository;
         this.fonctionsMapper = fonctionsMapper;
+        this.applicationsRepository = applicationsRepository;
     }
 
     public FonctionsDto save(FonctionsDto fonctionsDto) {
@@ -67,6 +70,7 @@ public class FonctionsService {
     }
 
     public List<FonctionsDto> initFonction(Applications applications){
+        Applications app = applicationsRepository.getReferenceById(applications.getId());
         try {
             Resource resource = new ClassPathResource("config/fonctions.json");
             ObjectMapper objectMapper = new ObjectMapper();
@@ -74,13 +78,15 @@ public class FonctionsService {
             List<FonctionsDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
             return o.stream().filter(p-> Objects.equals(p.getModule(),applications.getModule())&& Objects.equals(p.getApplication(), applications.getCode())).map(_l->{
                 Fonctions fonctions = fonctionsMapper.toEntity(_l);
-                fonctions.setApplications(applications);
+                fonctions.setApplication(app.getCode());
+                fonctions.setApplications(app);
                 fonctions.setLibCode(FormatText.formatCode(_l.getLibCode()));
                 fonctions.setOrdre(FormatText.getOrdre(_l.getCode()));
-                return fonctionsMapper.toDto(repository.saveAndFlush(fonctions));
+                repository.saveAndFlush(fonctions);
+                return fonctionsMapper.toDto(fonctions);
             }).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE);
+            throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE,e);
         }
     }
 }

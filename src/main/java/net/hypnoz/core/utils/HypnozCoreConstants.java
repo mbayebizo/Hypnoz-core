@@ -29,4 +29,5 @@ public interface HypnozCoreConstants {
 
     int TAILLE_RACINE_COMPTA_FOURNISSEUR = 4;
 
+    int STANDARD = 0;
 }

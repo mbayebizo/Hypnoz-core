@@ -51,7 +51,7 @@ class StructuresServiceTest {
 
     @BeforeEach
     void setUp() {
-        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService);
+        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService, groupesService);
     }
 
     @Test

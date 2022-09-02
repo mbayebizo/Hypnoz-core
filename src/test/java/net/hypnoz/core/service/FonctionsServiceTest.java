@@ -9,14 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +31,7 @@ class FonctionsServiceTest {
 
     @BeforeEach
     void setUp() {
-        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper);
+        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
     }
 
     @Test

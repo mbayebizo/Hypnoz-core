@@ -4,6 +4,7 @@ package net.hypnoz.core.controller;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.StructuresDto;
+import net.hypnoz.core.dto.pojo.StructureInitPojo;
 import net.hypnoz.core.service.StructuresService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,5 +59,10 @@ public class StructuresController {
     public ResponseEntity<Void> update(@RequestBody @Validated StructuresDto structuresDto, @PathVariable("id") Long id) {
         structuresService.update(structuresDto, id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/initSysteme")
+    public ResponseEntity<StructuresDto> initSysteme(@RequestBody @Validated StructureInitPojo structureInitPojo){
+        return structuresService.initConfigStructure(structureInitPojo);
     }
 }
