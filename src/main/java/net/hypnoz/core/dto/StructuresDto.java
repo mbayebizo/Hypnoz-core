@@ -8,7 +8,6 @@ import net.hypnoz.core.annotation.CheckEmail;
 import net.hypnoz.core.annotation.CheckMobile;
 import net.hypnoz.core.emus.TypeEntreprise;
 
-import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 
@@ -39,7 +38,6 @@ public class StructuresDto extends AbstractDto<Long> {
     String ville;
     String departement;
     String pays;
-    @CheckMobile
     String telephone;
     @CheckEmail
     String email;

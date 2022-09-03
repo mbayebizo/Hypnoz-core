@@ -1,6 +1,5 @@
 package net.hypnoz.core.utils;
 
-import ch.qos.logback.core.CoreConstants;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 

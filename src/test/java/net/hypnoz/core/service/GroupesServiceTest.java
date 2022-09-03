@@ -37,7 +37,7 @@ class GroupesServiceTest {
 
     @BeforeEach
     void setUp() {
-        groupesServiceUnderTest = new GroupesService(mockRepository, mockGroupesMapper, groupesApplications, structuresRepository, modulesRepository, applicationsRepository, fonctionsRepository, modulesStructureRepository, groupesmodulesRepository);
+       // groupesServiceUnderTest = new GroupesService(mockRepository, mockGroupesMapper, groupesApplications, structuresRepository, modulesRepository, applicationsRepository, fonctionsRepository, modulesStructureRepository, groupesmodulesRepository);
     }
 
     @Test

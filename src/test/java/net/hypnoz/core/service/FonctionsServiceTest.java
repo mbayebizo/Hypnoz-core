@@ -31,7 +31,7 @@ class FonctionsServiceTest {
 
     @BeforeEach
     void setUp() {
-        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
+        //fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
     }
 
     @Test

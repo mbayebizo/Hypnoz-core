@@ -1,5 +1,5 @@
 package net.hypnoz.core.utils;
 
-public interface CoreConstance {
-    int STANDART_MODULE=0;
+public class CoreConstance {
+    public static final int STANDART_MODULE = 0;
 }

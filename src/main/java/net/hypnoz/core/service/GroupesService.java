@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.GroupesDto;
 import net.hypnoz.core.mapper.GroupesMapper;
 import net.hypnoz.core.mapper.GroupesModulesMapper;
-import net.hypnoz.core.models.Groupes;
-import net.hypnoz.core.models.GroupesModules;
-import net.hypnoz.core.models.ModulesStructure;
-import net.hypnoz.core.models.Structures;
+import net.hypnoz.core.models.*;
 import net.hypnoz.core.repository.*;
 import net.hypnoz.core.utils.HypnozCoreConstants;
 import org.springframework.data.domain.Page;
@@ -33,9 +30,11 @@ public class GroupesService {
     private final FonctionsRepository fonctionsRepository;
     private final ModulesStructureRepository modulesStructureRepository;
     private final GroupesModulesRepository groupesmodulesRepository;
+    private final GroupesApplicationsRepository groupesApplicationsRepository;
+    private final GroupesFonctionsRepository groupesFonctionsRepository;
 
 
-    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, GroupesModulesMapper groupesApplications, StructuresRepository structuresRepository, ModulesRepository modulesRepository, ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository, ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository) {
+    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, GroupesModulesMapper groupesApplications, StructuresRepository structuresRepository, ModulesRepository modulesRepository, ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository, ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesFonctionsRepository groupesFonctionsRepository) {
         this.repository = repository;
         this.groupesMapper = groupesMapper;
         this.groupesApplications = groupesApplications;
@@ -45,6 +44,8 @@ public class GroupesService {
         this.fonctionsRepository = fonctionsRepository;
         this.modulesStructureRepository = modulesStructureRepository;
         this.groupesmodulesRepository = groupesmodulesRepository;
+        this.groupesApplicationsRepository = groupesApplicationsRepository;
+        this.groupesFonctionsRepository = groupesFonctionsRepository;
     }
 
     public GroupesDto save(GroupesDto groupesDto) {
@@ -87,10 +88,11 @@ public class GroupesService {
 
 
     private void groupesModuleApplicationFonction(Groupes groupes) {
-        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId()).stream()
+        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
+                .stream()
                 .map(ModulesStructure::getModules)
                 .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
-                .peek(m -> {
+                .forEach(m -> {
                     GroupesModules groupesModules = GroupesModules.builder()
                             .id(GroupesModules.GroupesModulesPK.builder()
                                     .groupesId(groupes.getId())
@@ -101,6 +103,41 @@ public class GroupesService {
                             .build();
                     groupesmodulesRepository.saveAndFlush(groupesModules);
                 });
+
+        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
+                .stream()
+                .map(ModulesStructure::getModules)
+                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
+                .forEach(m-> applicationsRepository.findByModules_Id(m.getId())
+                        .forEach(applications -> {
+                            GroupesApplications grpApp = GroupesApplications.builder()
+                                    .id(GroupesApplications.GroupesApplicationsPK.builder()
+                                            .applicationsId(applications.getId())
+                                            .groupesId(groupes.getId())
+                                            .build())
+                                    .applications(applications)
+                                    .groupes(groupes)
+                                    .build();
+                            groupesApplicationsRepository.saveAndFlush(grpApp);
+                        }));
+
+        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
+                .stream()
+                .map(ModulesStructure::getModules)
+                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
+                .forEach(m-> applicationsRepository.findByModules_Id(m.getId())
+                        .forEach(applications -> fonctionsRepository.findByApplications_Id(applications.getId())
+                                .forEach(fonctions -> {
+                                    GroupesFonctions groupesFonctions = GroupesFonctions.builder()
+                                            .id(GroupesFonctions.GroupesFonctionsPK.builder()
+                                                    .fonctionsId(fonctions.getId())
+                                                    .groupesId(groupes.getId())
+                                                    .build())
+                                            .fonctions(fonctions)
+                                            .groupes(groupes)
+                                            .build();
+                                    groupesFonctionsRepository.saveAndFlush(groupesFonctions);
+                                })));
 
     }
 }

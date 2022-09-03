@@ -51,7 +51,7 @@ class StructuresServiceTest {
 
     @BeforeEach
     void setUp() {
-        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService, groupesService);
+        //structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService, groupesService);
     }
 
     @Test
@@ -224,8 +224,6 @@ class StructuresServiceTest {
         StructureInitPojo structureInitPojo = StructureInitPojo.builder()
                 .sigle("HYPNOZ")
                 .raisonSocial("Hypnoz Test ")
-                .typeEntreprise("SA")
-                .dateFiscale(LocalDate.now())
                 .build();
         structuresServiceUnderTest.initConfigStructure(structureInitPojo);
     }

@@ -32,7 +32,7 @@ class ApplicationsServiceTest {
 
     @BeforeEach
     void setUp() {
-        applicationsServiceUnderTest = new ApplicationsService(mockRepository, mockApplicationsMapper, modulesRepository);
+        //applicationsServiceUnderTest = new ApplicationsService(mockRepository, mockApplicationsMapper, modulesRepository);
     }
 
     @Test
