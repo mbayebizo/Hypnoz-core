@@ -48,12 +48,6 @@ public class ApplicationsController {
        }
     }
 
-    @GetMapping("/page-query")
-    public ResponseEntity<Page<ApplicationsDto>> pageQuery(ApplicationsDto applicationsDto, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ApplicationsDto> applicationsPage = applicationsService.findByCondition(applicationsDto, pageable);
-        return ResponseEntity.ok(applicationsPage);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@RequestBody @Validated ApplicationsDto applicationsDto, @PathVariable("id") Long id) {
         applicationsService.update(applicationsDto, id);

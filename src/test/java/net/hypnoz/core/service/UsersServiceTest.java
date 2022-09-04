@@ -3,7 +3,7 @@ package net.hypnoz.core.service;
 import net.hypnoz.core.dto.UsersDto;
 import net.hypnoz.core.mapper.UsersMapper;
 import net.hypnoz.core.models.Users;
-import net.hypnoz.core.repository.UsersRepository;
+import net.hypnoz.core.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,12 +32,25 @@ class UsersServiceTest {
     private UsersRepository mockRepository;
     @Mock
     private UsersMapper mockUsersMapper;
-
+    @Mock
+    private UserGroupesRepository userGroupesRepository;
+    @Mock
+    private ModulesStructureRepository modulesStructureRepository;
+    @Mock
+    private UserModulesRepository userModulesRepository;
+    @Mock
+    private ApplicationsRepository applicationsRepository;
+    @Mock UserApplicationsRepository userApplicationsRepository;
+    @Mock UserFonctionsRepository userFonctionsRepository;
+    @Mock
+    private FonctionsRepository fonctionsRepository;
     private UsersService usersServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        usersServiceUnderTest = new UsersService(mockRepository, mockUsersMapper, userGroupesRepository, modulesStructureRepository, userModulesRepository, applicationsRepository, fonctionsRepository);
+        usersServiceUnderTest = new UsersService(mockRepository, mockUsersMapper, userGroupesRepository,
+                modulesStructureRepository, userModulesRepository,userApplicationsRepository, userFonctionsRepository,
+                applicationsRepository, fonctionsRepository);
     }
 
     @Test

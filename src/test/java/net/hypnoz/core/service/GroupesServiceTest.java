@@ -3,7 +3,7 @@ package net.hypnoz.core.service;
 import net.hypnoz.core.dto.GroupesDto;
 import net.hypnoz.core.mapper.GroupesMapper;
 import net.hypnoz.core.models.Groupes;
-import net.hypnoz.core.repository.GroupesRepository;
+import net.hypnoz.core.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,12 +32,32 @@ class GroupesServiceTest {
     private GroupesRepository mockRepository;
     @Mock
     private GroupesMapper mockGroupesMapper;
-
+    @Mock
+    private GroupesApplicationsRepository groupesApplicationsRepository;
+    @Mock
+    private StructuresRepository structuresRepository;
+    @Mock
+    private ModulesRepository modulesRepository;
+    @Mock
+    private ApplicationsRepository applicationsRepository;
+    @Mock
+    private FonctionsRepository fonctionsRepository;
+    @Mock
+    private ModulesStructureRepository modulesStructureRepository;
+    @Mock
+    private GroupesModulesRepository groupesmodulesRepository;
+    @Mock
+    private GroupesFonctionsRepository groupesFonctionsRepository;
+    @Mock
+    private UsersService usersService;
     private GroupesService groupesServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-       // groupesServiceUnderTest = new GroupesService(mockRepository, mockGroupesMapper, groupesApplications, structuresRepository, modulesRepository, applicationsRepository, fonctionsRepository, modulesStructureRepository, groupesmodulesRepository);
+        groupesServiceUnderTest = new GroupesService(mockRepository,
+                mockGroupesMapper, structuresRepository, applicationsRepository, fonctionsRepository, modulesStructureRepository,
+                groupesmodulesRepository, groupesApplicationsRepository, groupesFonctionsRepository, usersService
+        );
     }
 
     @Test
@@ -106,7 +126,6 @@ class GroupesServiceTest {
 
         // Verify the results
     }
-
 
 
     @Test

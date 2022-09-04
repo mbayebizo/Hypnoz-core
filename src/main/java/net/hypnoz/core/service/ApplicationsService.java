@@ -56,11 +56,7 @@ public class ApplicationsService {
         return applicationsMapper.toDto(repository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
-    public Page<ApplicationsDto> findByCondition(ApplicationsDto applicationsDto, Pageable pageable) {
-        Page<Applications> entityPage = repository.findAll(pageable);
-        List<Applications> entities = entityPage.getContent();
-        return new PageImpl<>(applicationsMapper.toDto(entities), pageable, entityPage.getTotalElements());
-    }
+
 
     public ApplicationsDto update(ApplicationsDto applicationsDto, Long id) {
         ApplicationsDto data = findById(id);

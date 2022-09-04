@@ -26,8 +26,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StructuresServiceTest {
@@ -39,19 +38,20 @@ class StructuresServiceTest {
     @Mock
     private ModulesService modulesService;
     @Mock
-    private  ApplicationsService applicationsService;
+    private ApplicationsService applicationsService;
     @Mock
     private ModulesMapper modulesMapper;
     @Mock
     private ApplicationsMapper applicationsMapper;
     @Mock
     private FonctionsService fonctionsService;
-
+    @Mock
+    private GroupesService groupesService;
     private StructuresService structuresServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        //structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService, groupesService);
+        structuresServiceUnderTest = new StructuresService(mockRepository, mockStructuresMapper, modulesService, applicationsService, modulesMapper, applicationsMapper, fonctionsService, groupesService);
     }
 
     @Test
@@ -69,9 +69,9 @@ class StructuresServiceTest {
                 .sigle("teste")
                 .raisonSocial("raison social")
                 .build())).thenReturn(Structures.builder().build());
-        when(mockRepository.save(Structures.builder()
-                        .sigle("teste")
-                        .raisonSocial("raison social")
+        lenient().when(mockRepository.save(Structures.builder()
+                .sigle("teste")
+                .raisonSocial("raison social")
                 .build())).thenReturn(Structures.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
@@ -148,7 +148,6 @@ class StructuresServiceTest {
     }
 
 
-
     @Test
     void testFindByCondition_StructuresMapperReturnsNoItems() {
         // Setup
@@ -193,11 +192,11 @@ class StructuresServiceTest {
                 .sigle("teste")
                 .raisonSocial("raison social")
                 .build());
-        when(mockStructuresMapper.toEntity(StructuresDto.builder()
+      when(mockStructuresMapper.toEntity(StructuresDto.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
                 .build())).thenReturn(Structures.builder().build());
-        when(mockRepository.save(Structures.builder().build())).thenReturn(Structures.builder()
+        lenient().when(mockRepository.save(Structures.builder().build())).thenReturn(Structures.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
                 .build());
@@ -219,8 +218,9 @@ class StructuresServiceTest {
         assertThatThrownBy(() -> structuresServiceUnderTest.update(structuresDto, 1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
+
     @Test
-    void testInitModules(){
+    void testInitModules() {
         StructureInitPojo structureInitPojo = StructureInitPojo.builder()
                 .sigle("HYPNOZ")
                 .raisonSocial("Hypnoz Test ")

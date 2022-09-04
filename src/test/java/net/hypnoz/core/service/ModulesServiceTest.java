@@ -4,6 +4,7 @@ import net.hypnoz.core.dto.ModulesDto;
 import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.models.Modules;
 import net.hypnoz.core.repository.ModulesRepository;
+import net.hypnoz.core.repository.ModulesStructureRepository;
 import net.hypnoz.core.repository.StructuresRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,12 +30,13 @@ class ModulesServiceTest {
     private StructuresRepository structuresRepository;
     @Mock
     private ModulesMapper mockModulesMapper;
+    @Mock private ModulesStructureRepository modulesStructureRepository;
 
     private ModulesService modulesServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        //modulesServiceUnderTest = new ModulesService(mockRepository, mockModulesMapper,structuresRepository, modulesStructureRepository);
+        modulesServiceUnderTest = new ModulesService(mockRepository, mockModulesMapper, modulesStructureRepository);
     }
 
     @Test

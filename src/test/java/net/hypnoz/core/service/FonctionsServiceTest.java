@@ -3,6 +3,7 @@ package net.hypnoz.core.service;
 import net.hypnoz.core.dto.FonctionsDto;
 import net.hypnoz.core.mapper.FonctionsMapper;
 import net.hypnoz.core.models.Fonctions;
+import net.hypnoz.core.repository.ApplicationsRepository;
 import net.hypnoz.core.repository.FonctionsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,13 @@ class FonctionsServiceTest {
     private FonctionsRepository mockRepository;
     @Mock
     private FonctionsMapper mockFonctionsMapper;
-
+    @Mock
+    private ApplicationsRepository applicationsRepository;
     private FonctionsService fonctionsServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        //fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
+        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
     }
 
     @Test
@@ -82,8 +84,6 @@ class FonctionsServiceTest {
         // Run the test
         assertThatThrownBy(() -> fonctionsServiceUnderTest.findById(0L)).isInstanceOf(ResourceNotFoundException.class);
     }
-
-
 
 
     @Test

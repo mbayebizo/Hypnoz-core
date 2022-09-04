@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.GroupesDto;
 import net.hypnoz.core.mapper.GroupesMapper;
-import net.hypnoz.core.mapper.GroupesModulesMapper;
 import net.hypnoz.core.models.*;
 import net.hypnoz.core.repository.*;
 import net.hypnoz.core.utils.HypnozCoreConstants;
@@ -23,9 +22,7 @@ import java.util.List;
 public class GroupesService {
     private final GroupesRepository repository;
     private final GroupesMapper groupesMapper;
-    private final GroupesModulesMapper groupesApplications;
     private final StructuresRepository structuresRepository;
-    private final ModulesRepository modulesRepository;
     private final ApplicationsRepository applicationsRepository;
     private final FonctionsRepository fonctionsRepository;
     private final ModulesStructureRepository modulesStructureRepository;
@@ -34,13 +31,12 @@ public class GroupesService {
     private final GroupesFonctionsRepository groupesFonctionsRepository;
     private final UsersService usersService;
 
-
-    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, GroupesModulesMapper groupesApplications, StructuresRepository structuresRepository, ModulesRepository modulesRepository, ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository, ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesFonctionsRepository groupesFonctionsRepository, UsersService usersService) {
+    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, StructuresRepository structuresRepository,
+                          ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository,
+                          ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesFonctionsRepository groupesFonctionsRepository, UsersService usersService) {
         this.repository = repository;
         this.groupesMapper = groupesMapper;
-        this.groupesApplications = groupesApplications;
         this.structuresRepository = structuresRepository;
-        this.modulesRepository = modulesRepository;
         this.applicationsRepository = applicationsRepository;
         this.fonctionsRepository = fonctionsRepository;
         this.modulesStructureRepository = modulesStructureRepository;
@@ -49,6 +45,7 @@ public class GroupesService {
         this.groupesFonctionsRepository = groupesFonctionsRepository;
         this.usersService = usersService;
     }
+
 
     public GroupesDto save(GroupesDto groupesDto) {
         Groupes entity = groupesMapper.toEntity(groupesDto);

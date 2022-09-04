@@ -4,6 +4,7 @@ import net.hypnoz.core.dto.ApplicationsDto;
 import net.hypnoz.core.mapper.ApplicationsMapper;
 import net.hypnoz.core.models.Applications;
 import net.hypnoz.core.repository.ApplicationsRepository;
+import net.hypnoz.core.repository.ModulesRepository;
 import net.hypnoz.core.services.builder.ApplicationsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,12 +28,13 @@ class ApplicationsServiceTest {
     private ApplicationsRepository mockRepository;
     @Mock
     private ApplicationsMapper mockApplicationsMapper;
-
+    @Mock
+    private ModulesRepository modulesRepository;
     private ApplicationsService applicationsServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        //applicationsServiceUnderTest = new ApplicationsService(mockRepository, mockApplicationsMapper, modulesRepository);
+        applicationsServiceUnderTest = new ApplicationsService(mockRepository, mockApplicationsMapper, modulesRepository);
     }
 
     @Test
@@ -72,9 +74,6 @@ class ApplicationsServiceTest {
         assertThatThrownBy(() -> applicationsServiceUnderTest.findById(1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
-
-
-
 
 
     @Test
