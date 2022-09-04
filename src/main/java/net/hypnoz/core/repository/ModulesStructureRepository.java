@@ -10,5 +10,4 @@ import java.util.Set;
 @Repository
 public interface ModulesStructureRepository extends JpaRepository<ModulesStructure, ModulesStructure.ModulesStructurePK>, JpaSpecificationExecutor<ModulesStructure> {
     Set<ModulesStructure> findById_StructuresId(Long structuresId);
-    Set<ModulesStructure> findById_ModulesId(Long modulesId);
 }

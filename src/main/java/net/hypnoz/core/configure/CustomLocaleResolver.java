@@ -12,7 +12,7 @@ import java.util.Locale;
 
 @Configuration
 public class CustomLocaleResolver extends AcceptHeaderLocaleResolver implements WebMvcConfigurer {
-    List<Locale> LOCALES = Arrays.asList(
+    List<Locale> locales = Arrays.asList(
             new Locale("fr"),
             new Locale("en")
     );
@@ -22,7 +22,7 @@ public class CustomLocaleResolver extends AcceptHeaderLocaleResolver implements 
         String headerLang = request.getHeader("Accept-Language");
         return headerLang == null || headerLang.isEmpty()
                 ? Locale.getDefault()
-                :Locale.lookup(Locale.LanguageRange.parse(headerLang),LOCALES);
+                :Locale.lookup(Locale.LanguageRange.parse(headerLang),locales);
     }
 
     public ResourceBundleMessageSource messageSource(){

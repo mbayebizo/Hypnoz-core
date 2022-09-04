@@ -7,9 +7,6 @@ import net.hypnoz.core.mapper.GroupesMapper;
 import net.hypnoz.core.models.*;
 import net.hypnoz.core.repository.*;
 import net.hypnoz.core.utils.HypnozCoreConstants;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -60,11 +57,6 @@ public class GroupesService {
         return groupesMapper.toDto(repository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
-    public Page<GroupesDto> findByCondition(GroupesDto groupesDto, Pageable pageable) {
-        Page<Groupes> entityPage = repository.findAll(pageable);
-        List<Groupes> entities = entityPage.getContent();
-        return new PageImpl<>(groupesMapper.toDto(entities), pageable, entityPage.getTotalElements());
-    }
 
     public GroupesDto update(GroupesDto groupesDto, Long id) {
         GroupesDto data = findById(id);
@@ -117,16 +109,14 @@ public class GroupesService {
                         .groupes(groupes)
                         .build());
 
-                fonctionsRepository.findByApplicationsId(applications.getId()).forEach(fonctions -> {
-                    groupesFonctionsRepository.saveAndFlush(GroupesFonctions.builder()
-                            .id(GroupesFonctions.GroupesFonctionsPK.builder()
-                                    .fonctionsId(fonctions.getId())
-                                    .groupesId(groupes.getId())
-                                    .build())
-                            .fonctions(fonctions)
-                            .groupes(groupes)
-                            .build());
-                });
+                fonctionsRepository.findByApplicationsId(applications.getId()).forEach(fonctions -> groupesFonctionsRepository.saveAndFlush(GroupesFonctions.builder()
+                        .id(GroupesFonctions.GroupesFonctionsPK.builder()
+                                .fonctionsId(fonctions.getId())
+                                .groupesId(groupes.getId())
+                                .build())
+                        .fonctions(fonctions)
+                        .groupes(groupes)
+                        .build()));
 
             });
         });

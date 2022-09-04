@@ -156,8 +156,5 @@ class ModulesServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
-    @Test
-    void initModule(){
 
-    }
 }

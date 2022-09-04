@@ -7,9 +7,6 @@ import net.hypnoz.core.mapper.UsersMapper;
 import net.hypnoz.core.models.*;
 import net.hypnoz.core.repository.*;
 import net.hypnoz.core.utils.HypnozCoreConstants;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +54,7 @@ public class UsersService {
         return usersMapper.toDto(repository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
-    public Page<UsersDto> findByCondition(UsersDto usersDto, Pageable pageable) {
-        Page<Users> entityPage = repository.findAll(pageable);
-        List<Users> entities = entityPage.getContent();
-        return new PageImpl<>(usersMapper.toDto(entities), pageable, entityPage.getTotalElements());
-    }
+
 
     public UsersDto update(UsersDto usersDto, Long id) {
         UsersDto data = findById(id);

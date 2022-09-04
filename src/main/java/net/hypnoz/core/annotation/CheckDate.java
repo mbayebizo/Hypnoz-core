@@ -54,6 +54,7 @@ public @interface CheckDate {
 
         @Override
         public void initialize(CheckDate constraintAnnotation) {
+
         }
 
         @Override
