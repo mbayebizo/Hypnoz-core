@@ -1,6 +1,5 @@
 package net.hypnoz.core.services.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.hypnoz.core.dto.UsersDto;
 
 import java.util.Collections;

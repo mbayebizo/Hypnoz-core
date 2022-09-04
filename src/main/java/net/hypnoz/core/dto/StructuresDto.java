@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.hypnoz.core.annotation.CheckDate;
 import net.hypnoz.core.annotation.CheckEmail;
-import net.hypnoz.core.annotation.CheckMobile;
 import net.hypnoz.core.emus.TypeEntreprise;
 
 import java.io.Serial;

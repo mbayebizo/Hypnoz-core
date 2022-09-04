@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
