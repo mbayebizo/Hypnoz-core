@@ -1,0 +1,26 @@
+[
+  {
+    "code": "M0-A0",
+    "libCode": "Tableau de bord",
+    "libDesc": "",
+    "url": "/",
+    "iconClass": "dashboard",
+    "module": "M0"
+  },
+  {
+    "code": "M0-A1",
+    "libCode": "Paramètre généreaux",
+    "libDesc": "",
+    "url": "param",
+    "iconClass": "dashboard",
+    "module": "M0"
+  },
+  {
+    "code": "M0-A2",
+    "libCode": "Utilisateurs & rôles",
+    "libDesc": "",
+    "url": "roles",
+    "iconClass": "dashboard",
+    "module": "M0"
+  }
+]

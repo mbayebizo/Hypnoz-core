@@ -1,7 +1,6 @@
 package net.hypnoz.core.models;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.domain.Persistable;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.Persistable;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users_groupes", indexes = {
@@ -58,11 +56,12 @@ public class UserGroupes implements Persistable<UserGroupes.UserGroupesPK> {
     @AllArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class UserGroupesPK implements Serializable{
         @Serial
         private static final long serialVersionUID = 4736343511565176307L;
-        private  Long groupes_id;
-        private Long users_id;
+        private  Long groupesId;
+        private Long usersId;
     }
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 @Getter
 @Setter
 @Entity
@@ -21,12 +22,16 @@ public class Applications extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String libDesc;
-    String url;
-    String iconClass;
+    private String code;
+    private String libCode;
+    private String libDesc;
+    private String url;
+    private String iconClass;
     String module;
+    Long modulesId;
     String active;
     int ordre;
+
 
     @Override
     public void beforePrePersit() {

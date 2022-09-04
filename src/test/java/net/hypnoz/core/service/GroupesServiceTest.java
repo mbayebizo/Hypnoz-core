@@ -3,25 +3,18 @@ package net.hypnoz.core.service;
 import net.hypnoz.core.dto.GroupesDto;
 import net.hypnoz.core.mapper.GroupesMapper;
 import net.hypnoz.core.models.Groupes;
-import net.hypnoz.core.repository.GroupesRepository;
+import net.hypnoz.core.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,12 +25,32 @@ class GroupesServiceTest {
     private GroupesRepository mockRepository;
     @Mock
     private GroupesMapper mockGroupesMapper;
-
+    @Mock
+    private GroupesApplicationsRepository groupesApplicationsRepository;
+    @Mock
+    private StructuresRepository structuresRepository;
+    @Mock
+    private ModulesRepository modulesRepository;
+    @Mock
+    private ApplicationsRepository applicationsRepository;
+    @Mock
+    private FonctionsRepository fonctionsRepository;
+    @Mock
+    private ModulesStructureRepository modulesStructureRepository;
+    @Mock
+    private GroupesModulesRepository groupesmodulesRepository;
+    @Mock
+    private GroupesFonctionsRepository groupesFonctionsRepository;
+    @Mock
+    private UsersService usersService;
     private GroupesService groupesServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        groupesServiceUnderTest = new GroupesService(mockRepository, mockGroupesMapper);
+        groupesServiceUnderTest = new GroupesService(mockRepository,
+                mockGroupesMapper, structuresRepository, applicationsRepository, fonctionsRepository, modulesStructureRepository,
+                groupesmodulesRepository, groupesApplicationsRepository, groupesFonctionsRepository, usersService
+        );
     }
 
     @Test
@@ -87,43 +100,6 @@ class GroupesServiceTest {
 
         // Run the test
         assertThatThrownBy(() -> groupesServiceUnderTest.findById(0L)).isInstanceOf(ResourceNotFoundException.class);
-    }
-
-    @Test
-    void testFindByCondition() {
-        // Setup
-        final GroupesDto groupesDto = GroupesDto.builder().build();
-
-        // Configure GroupesRepository.findAll(...).
-        final Page<Groupes> groupes = new PageImpl<>(List.of(Groupes.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(groupes);
-
-        when(mockGroupesMapper.toDto(List.of(Groupes.builder().build())))
-                .thenReturn(List.of(GroupesDto.builder().build()));
-
-        // Run the test
-        final Page<GroupesDto> result = groupesServiceUnderTest.findByCondition(groupesDto, PageRequest.of(0, 1));
-
-        // Verify the results
-    }
-
-
-
-    @Test
-    void testFindByCondition_GroupesMapperReturnsNoItems() {
-        // Setup
-        final GroupesDto groupesDto = GroupesDto.builder().build();
-
-        // Configure GroupesRepository.findAll(...).
-        final Page<Groupes> groupes = new PageImpl<>(List.of(Groupes.builder().build()));
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn(groupes);
-
-        when(mockGroupesMapper.toDto(List.of(Groupes.builder().build()))).thenReturn(Collections.emptyList());
-
-        // Run the test
-        final Page<GroupesDto> result = groupesServiceUnderTest.findByCondition(groupesDto, PageRequest.of(0, 1));
-
-        // Verify the results
     }
 
     @Test

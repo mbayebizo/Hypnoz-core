@@ -1,0 +1,61 @@
+[
+  {
+    "code": "M0-A1-F1",
+    "libCode": "Structures",
+    "libDesc": "",
+    "url": "param/structure",
+    "iconClass": "arrow_right",
+    "application": "M0-A1",
+    "type": "M"
+  },
+  {
+    "code": "M0-A1-F2",
+    "libCode": "Model Impression#",
+    "libDesc": "",
+    "url": "param/mimpression",
+    "iconClass": "arrow_right",
+    "application": "M0-A1",
+    "module": "M0",
+    "type": "M"
+  },
+  {
+    "code": "M0-A1-F3",
+    "libCode": "Habilitation",
+    "libDesc": "",
+    "url": "param/habilitation",
+    "iconClass": "arrow_right",
+    "application": "M0-A1",
+    "module": "M0",
+    "type": "M"
+  },
+  {
+    "code": "M0-A1-F4",
+    "libCode": "Piste d'audit",
+    "libDesc": "",
+    "url": "roles/piste",
+    "iconClass": "arrow_right",
+    "application": "M0-A1",
+    "module": "M0",
+    "type": "M"
+  },
+  {
+    "code": "M0-A2-F1",
+    "libCode": "Goupes",
+    "libDesc": "",
+    "url": "roles/groupes",
+    "iconClass": "arrow_right",
+    "application": "M0-A2",
+    "module": "M0",
+    "type": "M"
+  },
+  {
+    "code": "M0-A2-F2",
+    "libCode": "Utilisateurs",
+    "libDesc": "",
+    "url": "roles/users",
+    "iconClass": "arrow_right",
+    "application": "M0-A2",
+    "module": "M0",
+    "type": "M"
+  }
+]

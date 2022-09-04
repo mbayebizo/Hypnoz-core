@@ -3,20 +3,15 @@ package net.hypnoz.core.service;
 import net.hypnoz.core.dto.FonctionsDto;
 import net.hypnoz.core.mapper.FonctionsMapper;
 import net.hypnoz.core.models.Fonctions;
+import net.hypnoz.core.repository.ApplicationsRepository;
 import net.hypnoz.core.repository.FonctionsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,12 +27,13 @@ class FonctionsServiceTest {
     private FonctionsRepository mockRepository;
     @Mock
     private FonctionsMapper mockFonctionsMapper;
-
+    @Mock
+    private ApplicationsRepository applicationsRepository;
     private FonctionsService fonctionsServiceUnderTest;
 
     @BeforeEach
     void setUp() {
-        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper);
+        fonctionsServiceUnderTest = new FonctionsService(mockRepository, mockFonctionsMapper, applicationsRepository);
     }
 
     @Test
@@ -88,8 +84,6 @@ class FonctionsServiceTest {
         // Run the test
         assertThatThrownBy(() -> fonctionsServiceUnderTest.findById(0L)).isInstanceOf(ResourceNotFoundException.class);
     }
-
-
 
 
     @Test

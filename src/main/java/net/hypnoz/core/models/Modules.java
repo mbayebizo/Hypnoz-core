@@ -25,21 +25,15 @@ public class Modules extends AbstractEntity<Long> {
     String code;
     String libCode;
     String libDesc;
-    String version;
-    String versionDate;
     String url;
     String iconClass;
     String active;
+    int standart;
     int ordre;
 
-    @PrePersist
-    public void beforePersist() {
+    @Override
+    public void beforePrePersit() {
+        super.beforePrePersit();
         this.active = "Y";
     }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "str_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("structuresId")
-    Structures structures;
 }

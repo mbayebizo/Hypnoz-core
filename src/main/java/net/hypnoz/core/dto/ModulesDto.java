@@ -3,7 +3,6 @@ package net.hypnoz.core.dto;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import net.hypnoz.core.models.Structures;
 
 import java.io.Serial;
 
@@ -23,13 +22,12 @@ public class ModulesDto extends AbstractDto<Long> {
      String code;
      String libCode;
      String libDesc;
-     String version;
-     String versionDate;
      String url;
      String iconClass;
      String active;
+     Integer standart;
      int ordre;
-     Structures structures;
+     StructuresDto structures;
 
     
 }

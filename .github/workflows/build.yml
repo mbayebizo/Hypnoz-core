@@ -1,4 +1,4 @@
-name: Build
+name: Hypnoz Core
 on:
   push:
     branches:
@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.1.0
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:

@@ -4,11 +4,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnoz.core.dto.GroupesDto;
 import net.hypnoz.core.service.GroupesService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +41,6 @@ public class GroupesController {
             log.error("Unable to delete non-existent data！");
             throw new ResourceNotFoundException();
         }
-    }
-
-    @GetMapping("/page-query")
-    public ResponseEntity<Page<GroupesDto>> pageQuery(GroupesDto groupesDto, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<GroupesDto> groupesPage = groupesService.findByCondition(groupesDto, pageable);
-        return ResponseEntity.ok(groupesPage);
     }
 
     @PutMapping("/{id}")

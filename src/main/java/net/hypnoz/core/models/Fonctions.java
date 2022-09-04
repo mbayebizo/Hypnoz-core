@@ -23,21 +23,24 @@ public class Fonctions extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-   String code;
-   String libDesc;
-   String type;
-   String url;
-   String iconClass;
-   String actions;
-   String application;
-   String module;
+    private String code;
+    private String libCode;
+    private String libDesc;
+    private String type;
+    private String url;
+    private String iconClass;
+    private String actions;
+    private String application;
+    private String module;
+    private Long applicationsId;
    String active;
    int ordre;
    boolean used;
 
-    @PrePersist
-    public void beforePersist() {
+    @Override
+    public void beforePrePersit() {
+        super.beforePrePersit();
         this.active = "Y";
+        this.used=true;
     }
-
 }

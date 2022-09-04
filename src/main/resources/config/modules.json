@@ -1,0 +1,66 @@
+[
+  {
+    "code": "M0",
+    "libCode": "Administration",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 0
+  },
+  {
+    "code": "M1",
+    "libCode": "Compabitlité",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M2",
+    "libCode": "Gestion commerciale",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M3",
+    "libCode": "Trésorerie",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M4",
+    "libCode": "Paie & RH",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M5",
+    "libCode": "Immobilisation",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M6",
+    "libCode": "Etats financiers",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  },
+  {
+    "code": "M7",
+    "libCode": "Parcs",
+    "libDesc": "",
+    "url": "localhost:9080",
+    "iconClass": "dashboard",
+    "standart": 1
+  }
+]
