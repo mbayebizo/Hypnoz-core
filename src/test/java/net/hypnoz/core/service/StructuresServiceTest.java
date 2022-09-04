@@ -7,6 +7,7 @@ import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
+import net.hypnoz.core.utils.exceptions.ResponseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +19,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -89,6 +94,86 @@ class StructuresServiceTest {
         // Verify the results
         assertThat(result).isEqualTo(expectedResult);
     }
+
+    @Test
+    void testExceptionRaisonSocialSave() {
+        // Setup
+        ResponseException exception = assertThrows(ResponseException.class,()->{
+            final StructuresDto structuresDto = StructuresDto.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build();
+            final StructuresDto expectedResult = StructuresDto.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build();
+            lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build())).thenReturn(Structures.builder().build());
+            lenient().when(mockRepository.save(Structures.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build())).thenReturn(Structures.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build());
+            lenient().when(mockStructuresMapper.toDto(Structures.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build())).thenReturn(StructuresDto.builder()
+                    .sigle("teqsdqsdq")
+                    .raisonSocial("r")
+                    .build());
+
+            // Run the test
+            final StructuresDto result = structuresServiceUnderTest.save(structuresDto).getBody();
+        });
+
+
+        // Verify the results
+        assertEquals("raison.social.error.description",exception.getMessage());
+    }
+    @Test
+    void testExceptionSigleSave() {
+        // Setup
+        ResponseException exception = assertThrows(ResponseException.class,()->{
+            final StructuresDto structuresDto = StructuresDto.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build();
+            final StructuresDto expectedResult = StructuresDto.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build();
+            lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build())).thenReturn(Structures.builder().build());
+            lenient().when(mockRepository.save(Structures.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build())).thenReturn(Structures.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build());
+            lenient().when(mockStructuresMapper.toDto(Structures.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build())).thenReturn(StructuresDto.builder()
+                    .sigle("t")
+                    .raisonSocial("rxcxcwxcwxcwxc")
+                    .build());
+
+            // Run the test
+            final StructuresDto result = structuresServiceUnderTest.save(structuresDto).getBody();
+        });
+
+
+        // Verify the results
+        assertEquals("sigle.error.description",exception.getMessage());
+    }
+
 
     @Test
     void testDeleteById() {

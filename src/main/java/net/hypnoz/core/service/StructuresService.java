@@ -9,7 +9,9 @@ import net.hypnoz.core.mapper.ModulesMapper;
 import net.hypnoz.core.mapper.StructuresMapper;
 import net.hypnoz.core.models.Structures;
 import net.hypnoz.core.repository.StructuresRepository;
+import net.hypnoz.core.utils.FilesUtils;
 import net.hypnoz.core.utils.HypnozCoreConstants;
+import net.hypnoz.core.utils.OsUtils;
 import net.hypnoz.core.utils.RequesteResponsheandler.RequestErrorEnum;
 import net.hypnoz.core.utils.exceptions.ResponseException;
 import org.springframework.beans.BeanUtils;
@@ -19,9 +21,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -121,7 +127,47 @@ public class StructuresService {
             groupesService.initGroupe(structuresMapper.toEntity(structureResponse.getBody()));
         }
 
+        createFolderSysteme();
         return structureResponse;
 
+    }
+
+    private void createFolderSysteme() {
+        String path = OsUtils.getOsHomeDir();
+        if(!FilesUtils.existed(path)){
+            FilesUtils.mkdir(path);
+        }
+        if (FilesUtils.existed(path)) {
+            if (!FilesUtils.existed(path + "/" + HypnozCoreConstants.DIR_TEMP)) {
+                FilesUtils.mkdir(path + "/" + HypnozCoreConstants.DIR_TEMP);
+            }
+            if (!FilesUtils.existed(path + "/" + HypnozCoreConstants.DIR_LOG)) {
+                FilesUtils.mkdir(path + "/" + HypnozCoreConstants.DIR_LOG);
+            }
+
+        }
+    }
+
+    public String uploadLogoSociete(MultipartFile file, Long strid, String logo){
+        String pathImage = OsUtils.getOsHomeDir();
+        String message="";
+        String urlImage="";
+        if (FilesUtils.existed(pathImage)) {
+            if (!FilesUtils.existed(pathImage + "/structure" + strid + "/image/logos/")) {
+                FilesUtils.mkdir(pathImage + "/structure" + strid + "/image/logos/");
+            }
+        }
+
+        String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        Path rootLocation = Paths.get(pathImage + "/structure"+strid+"/image/logos/"+logo+'.'+extension);
+        try{
+            if(FilesUtils.existed(rootLocation.toFile().getPath())){
+                FilesUtils.deleteFile(rootLocation.toFile().getPath());
+            }
+            Files.copy(file.getInputStream(),rootLocation);
+            return  urlImage =rootLocation.toFile().getPath();
+        }catch (Exception e){
+            return  urlImage = "";
+        }
     }
 }
