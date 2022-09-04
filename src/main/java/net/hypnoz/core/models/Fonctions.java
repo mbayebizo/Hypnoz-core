@@ -34,15 +34,11 @@ public class Fonctions extends AbstractEntity<Long> {
     private String actions;
     private String application;
     private String module;
+    private Long applicationsId;
    String active;
    int ordre;
    boolean used;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("applicationsId")
-    private Applications applications;
+
     @Override
     public void beforePrePersit() {
         super.beforePrePersit();

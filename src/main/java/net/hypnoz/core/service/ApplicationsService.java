@@ -81,14 +81,13 @@ public class ApplicationsService {
                 if(repository.findByCodeAndModule(_l.getCode(),_l.getModule()).isEmpty()){
                     app = applicationsMapper.toEntity(_l);
                     app.setModule(modules.getCode());
-                    app.setModules(mod);
+                    app.setModulesId(mod.getId());
                     app.setLibCode(FormatText.formatCode(_l.getLibCode()));
                     app.setOrdre(FormatText.getOrdre(_l.getCode()));
                     repository.saveAndFlush(app);
                 }else{
                     app =repository.findByCodeAndModule(_l.getCode(),_l.getModule()).orElse(null);
                 }
-
                 return applicationsMapper.toDto(app);
             }).collect(Collectors.toList());
         } catch (IOException e) {

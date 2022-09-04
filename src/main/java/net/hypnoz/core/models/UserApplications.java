@@ -57,6 +57,7 @@ public class UserApplications implements Persistable<UserApplications.UserApplic
     @AllArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class UserApplicationsPK implements Serializable{
         @Serial
         private static final long serialVersionUID = 4736343511565176307L;

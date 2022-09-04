@@ -27,15 +27,11 @@ public class Applications extends AbstractEntity<Long> {
     private String url;
     private String iconClass;
     String module;
+    Long modulesId;
     String active;
     int ordre;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("modulesId")
-    private Modules modules;
+
     @Override
     public void beforePrePersit() {
         super.beforePrePersit();

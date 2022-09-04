@@ -55,7 +55,8 @@ public class StructuresService {
     public ResponseEntity<StructuresDto> save(StructuresDto structuresDto) {
         validationSigleRaisonSocial(structuresDto);
         Structures entity = structuresMapper.toEntity(structuresDto);
-        return ResponseEntity.ok(structuresMapper.toDto(repository.save(entity)));
+        repository.saveAndFlush(entity);
+        return ResponseEntity.ok(structuresMapper.toDto(entity));
     }
 
     private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
@@ -111,29 +112,17 @@ public class StructuresService {
                              .stream()
                              .map(applicationsDto -> fonctionsService.initFonction(applicationsMapper.toEntity(applicationsDto))));
              structureResponse = ResponseEntity.ok(structuresMapper.toDto(structuresOptional.get()));
+            groupesService.initGroupe(structuresMapper.toEntity(structureResponse.getBody()));
         } else {
              structureResponse = save(structuresDto);
             modulesService.initializeOrAddtModule(structuresMapper.toEntity(structureResponse.getBody()))
                     .stream()
                     .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
-                    .forEach(modulesDto -> {
-                         applicationsService.initApplication(modulesMapper.toEntity(modulesDto))
-                                .forEach(applicationsDto -> {
-                                    fonctionsService.initFonction(applicationsMapper.toEntity(applicationsDto));
-                                });
-
-                    });
+                    .forEach(modulesDto -> applicationsService.initApplication(modulesMapper.toEntity(modulesDto))
+                           .forEach(applicationsDto -> fonctionsService.initFonction(applicationsMapper.toEntity(applicationsDto))));
             groupesService.initGroupe(structuresMapper.toEntity(structureResponse.getBody()));
         }
 
-   /* List<ApplicationsDto> applicationsDtos= new ArrayList<>();
-     moduleDTO.stream()
-               .filter(modulesDto -> modulesDto.getStandart()== HypnozCoreConstants.STANDARD)
-               .forEach(mod-> {
-                     applicationsService.initApplication(modulesMapper.toEntity(mod)).stream().map(applicationsDtos::add);
-               });*/
-
-       /*applicationDTOs.forEach(app-> fonctionsService.initFonction((Applications) applicationsMapper.toEntity(app)));*/
         return structureResponse;
 
     }

@@ -79,7 +79,7 @@ public class FonctionsService {
             return o.stream().filter(p-> Objects.equals(p.getModule(),applications.getModule())&& Objects.equals(p.getApplication(), applications.getCode())).map(_l->{
                 Fonctions fonctions = fonctionsMapper.toEntity(_l);
                 fonctions.setApplication(app.getCode());
-                fonctions.setApplications(app);
+                fonctions.setApplicationsId(app.getId());
                 fonctions.setLibCode(FormatText.formatCode(_l.getLibCode()));
                 fonctions.setOrdre(FormatText.getOrdre(_l.getCode()));
                 repository.saveAndFlush(fonctions);

@@ -56,6 +56,7 @@ public class UserGroupes implements Persistable<UserGroupes.UserGroupesPK> {
     @AllArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class UserGroupesPK implements Serializable{
         @Serial
         private static final long serialVersionUID = 4736343511565176307L;

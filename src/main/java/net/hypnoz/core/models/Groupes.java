@@ -27,10 +27,7 @@ public class Groupes extends AbstractEntity<Long> {
     Long id;
     String code;
     String libelle;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "str_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("structuresId")
-    Structures structures;
+    @Column(name = "structures_id")
+    Long structuresId;
 
 }

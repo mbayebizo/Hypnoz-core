@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface FonctionsRepository extends JpaRepository<Fonctions, Long>, JpaSpecificationExecutor<Fonctions> {
-    Set<Fonctions> findByApplications_Id(Long id);
+    Set<Fonctions> findByApplicationsId(Long id);
 }

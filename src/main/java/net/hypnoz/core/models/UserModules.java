@@ -56,6 +56,7 @@ public class UserModules implements Persistable<UserModules.UserModulesPK> {
     @AllArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class UserModulesPK implements Serializable{
         @Serial
         private static final long serialVersionUID = -6704195049868174266L;

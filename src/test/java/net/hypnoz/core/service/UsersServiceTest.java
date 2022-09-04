@@ -37,7 +37,7 @@ class UsersServiceTest {
 
     @BeforeEach
     void setUp() {
-        usersServiceUnderTest = new UsersService(mockRepository, mockUsersMapper);
+        usersServiceUnderTest = new UsersService(mockRepository, mockUsersMapper, userGroupesRepository, modulesStructureRepository, userModulesRepository, applicationsRepository, fonctionsRepository);
     }
 
     @Test

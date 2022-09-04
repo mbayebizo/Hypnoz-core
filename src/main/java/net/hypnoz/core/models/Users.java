@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode(of = "{id}")
 @Builder
-public class Users extends AbstractEntity<Long>{
+public class Users extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -42,10 +42,4 @@ public class Users extends AbstractEntity<Long>{
     String login;
     @Column
     String pwd;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "grp_fk", value = ConstraintMode.NO_CONSTRAINT),
-            insertable = false, updatable = false)
-    @MapsId("groupes_id")
-    Groupes groupes;
 }

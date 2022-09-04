@@ -32,9 +32,10 @@ public class GroupesService {
     private final GroupesModulesRepository groupesmodulesRepository;
     private final GroupesApplicationsRepository groupesApplicationsRepository;
     private final GroupesFonctionsRepository groupesFonctionsRepository;
+    private final UsersService usersService;
 
 
-    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, GroupesModulesMapper groupesApplications, StructuresRepository structuresRepository, ModulesRepository modulesRepository, ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository, ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesFonctionsRepository groupesFonctionsRepository) {
+    public GroupesService(GroupesRepository repository, GroupesMapper groupesMapper, GroupesModulesMapper groupesApplications, StructuresRepository structuresRepository, ModulesRepository modulesRepository, ApplicationsRepository applicationsRepository, FonctionsRepository fonctionsRepository, ModulesStructureRepository modulesStructureRepository, GroupesModulesRepository groupesmodulesRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesFonctionsRepository groupesFonctionsRepository, UsersService usersService) {
         this.repository = repository;
         this.groupesMapper = groupesMapper;
         this.groupesApplications = groupesApplications;
@@ -46,6 +47,7 @@ public class GroupesService {
         this.groupesmodulesRepository = groupesmodulesRepository;
         this.groupesApplicationsRepository = groupesApplicationsRepository;
         this.groupesFonctionsRepository = groupesFonctionsRepository;
+        this.usersService = usersService;
     }
 
     public GroupesDto save(GroupesDto groupesDto) {
@@ -75,69 +77,64 @@ public class GroupesService {
     }
 
     public GroupesDto initGroupe(Structures structures) {
-        Structures str = structuresRepository.getReferenceById(structures.getId());
-        Groupes groupes = Groupes.builder()
+        Groupes groupes = null;
+        if (structuresRepository.findById(structures.getId()).isEmpty())
+            return null;
+        groupes = Groupes.builder()
                 .code("ADM")
                 .libelle("Administration")
-                .structures(str)
+                .structuresId(structures.getId())
                 .build();
         repository.saveAndFlush(groupes);
         groupesModuleApplicationFonction(groupes);
+        usersService.initUser(groupes);
         return groupesMapper.toDto(groupes);
     }
 
 
     private void groupesModuleApplicationFonction(Groupes groupes) {
-        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
+        List<Modules> moduleList = modulesStructureRepository.findById_StructuresId(groupes.getStructuresId())
                 .stream()
                 .map(ModulesStructure::getModules)
-                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
-                .forEach(m -> {
-                    GroupesModules groupesModules = GroupesModules.builder()
-                            .id(GroupesModules.GroupesModulesPK.builder()
+                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD).toList();
+
+
+
+
+        moduleList.forEach(modules -> {
+            groupesmodulesRepository.saveAndFlush(GroupesModules.builder()
+                    .id(GroupesModules.GroupesModulesPK.builder()
+                            .groupesId(groupes.getId())
+                            .modulesId(modules.getId())
+                            .build())
+                    .modules(modules)
+                    .groupes(groupes)
+                    .build());
+            applicationsRepository.findByModulesId(modules.getId()).forEach(applications ->{
+                groupesApplicationsRepository.saveAndFlush(GroupesApplications.builder()
+                        .id(GroupesApplications.GroupesApplicationsPK.builder()
+                                .applicationsId(applications.getId())
+                                .groupesId(groupes.getId())
+                                .build())
+                        .applications(applications)
+                        .groupes(groupes)
+                        .build());
+
+                fonctionsRepository.findByApplicationsId(applications.getId()).forEach(fonctions -> {
+                    groupesFonctionsRepository.saveAndFlush(GroupesFonctions.builder()
+                            .id(GroupesFonctions.GroupesFonctionsPK.builder()
+                                    .fonctionsId(fonctions.getId())
                                     .groupesId(groupes.getId())
-                                    .modulesId(m.getId())
                                     .build())
-                            .modules(m)
+                            .fonctions(fonctions)
                             .groupes(groupes)
-                            .build();
-                    groupesmodulesRepository.saveAndFlush(groupesModules);
+                            .build());
                 });
 
-        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
-                .stream()
-                .map(ModulesStructure::getModules)
-                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
-                .forEach(m-> applicationsRepository.findByModules_Id(m.getId())
-                        .forEach(applications -> {
-                            GroupesApplications grpApp = GroupesApplications.builder()
-                                    .id(GroupesApplications.GroupesApplicationsPK.builder()
-                                            .applicationsId(applications.getId())
-                                            .groupesId(groupes.getId())
-                                            .build())
-                                    .applications(applications)
-                                    .groupes(groupes)
-                                    .build();
-                            groupesApplicationsRepository.saveAndFlush(grpApp);
-                        }));
+            });
+        });
 
-        modulesStructureRepository.findById_StructuresId(groupes.getStructures().getId())
-                .stream()
-                .map(ModulesStructure::getModules)
-                .filter(mod -> mod.getStandart() == HypnozCoreConstants.STANDARD)
-                .forEach(m-> applicationsRepository.findByModules_Id(m.getId())
-                        .forEach(applications -> fonctionsRepository.findByApplications_Id(applications.getId())
-                                .forEach(fonctions -> {
-                                    GroupesFonctions groupesFonctions = GroupesFonctions.builder()
-                                            .id(GroupesFonctions.GroupesFonctionsPK.builder()
-                                                    .fonctionsId(fonctions.getId())
-                                                    .groupesId(groupes.getId())
-                                                    .build())
-                                            .fonctions(fonctions)
-                                            .groupes(groupes)
-                                            .build();
-                                    groupesFonctionsRepository.saveAndFlush(groupesFonctions);
-                                })));
+
 
     }
 }

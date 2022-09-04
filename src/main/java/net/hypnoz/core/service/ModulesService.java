@@ -79,14 +79,11 @@ public class ModulesService {
                 List<ModulesDto> o = objectMapper.readValue(resource.getInputStream(),typeReference);
                 return o.stream().map(_l->{
                     Modules mod = null;
-
-
                     if (repository.findByCode(_l.getCode()).isEmpty()){
                         mod = modulesMapper.toEntity(_l);
                         mod.setLibCode(FormatText.formatCode(_l.getLibCode()));
                         mod.setOrdre(FormatText.getOrdre(_l.getCode()));
                         repository.saveAndFlush(mod);
-
                         ModulesStructure modulesStructure = ModulesStructure.builder()
                                 .id(ModulesStructure.ModulesStructurePK.builder()
                                         .structuresId(structures.getId())
@@ -95,15 +92,11 @@ public class ModulesService {
                                 .modules(mod)
                                 .structures(structures)
                                 .build();
-
                         modulesStructureRepository.saveAndFlush(modulesStructure);
-
                     }else {
                        mod = repository.findByCode(_l.getCode()).orElse(null);
                     }
-
                     return modulesMapper.toDto(mod);
-
                 }).collect(Collectors.toList());
         } catch (IOException e) {
             throw new ResponseException(RequestErrorEnum.ERROR_INSERT_OR_UPDATE_IN_DATABASE,e);

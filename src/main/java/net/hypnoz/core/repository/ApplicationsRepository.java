@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface ApplicationsRepository extends JpaRepository<Applications, Long>, JpaSpecificationExecutor<Applications> {
-    List<Applications> findByModules_Id(Long id);
     Optional<Applications> findByCodeAndModule(String code, String module);
+
+    List<Applications> findByModulesId(Long modulesId);
+
 }
