@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static net.hypnoz.core.utils.HypnozCoreConstants.DEFAULT_DOC_SERVEUR_STRUCTURE;
+import static net.hypnoz.core.utils.HypnozCoreConstants.DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO;
+
 @Slf4j
 @Service
 @Transactional
@@ -150,24 +153,20 @@ public class StructuresService {
 
     public String uploadLogoSociete(MultipartFile file, Long strid, String logo){
         String pathImage = OsUtils.getOsHomeDir();
-        String message="";
-        String urlImage="";
-        if (FilesUtils.existed(pathImage)) {
-            if (!FilesUtils.existed(pathImage + "/structure" + strid + "/image/logos/")) {
-                FilesUtils.mkdir(pathImage + "/structure" + strid + "/image/logos/");
-            }
+        if (FilesUtils.existed(pathImage) && !FilesUtils.existed(pathImage + DEFAULT_DOC_SERVEUR_STRUCTURE + strid + DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO)) {
+                FilesUtils.mkdir(pathImage + DEFAULT_DOC_SERVEUR_STRUCTURE + strid + DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO);
         }
 
-        String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-        Path rootLocation = Paths.get(pathImage + "/structure"+strid+"/image/logos/"+logo+'.'+extension);
+        String extension =  Objects.requireNonNull(file.getOriginalFilename()).substring(Objects.requireNonNull(file.getOriginalFilename()).lastIndexOf(".") + 1);
+        Path rootLocation = Paths.get(pathImage + DEFAULT_DOC_SERVEUR_STRUCTURE+strid+DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO+logo+'.'+extension);
         try{
             if(FilesUtils.existed(rootLocation.toFile().getPath())){
                 FilesUtils.deleteFile(rootLocation.toFile().getPath());
             }
             Files.copy(file.getInputStream(),rootLocation);
-            return  urlImage =rootLocation.toFile().getPath();
+            return rootLocation.toFile().getPath();
         }catch (Exception e){
-            return  urlImage = "";
+            return  "";
         }
     }
 }
