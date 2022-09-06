@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("structures")
 @RestController
@@ -63,5 +64,9 @@ public class StructuresController {
     @PostMapping("/initSysteme")
     public ResponseEntity<StructuresDto> initSysteme(@RequestBody @Validated StructureInitPojo structureInitPojo){
         return structuresService.initConfigStructure(structureInitPojo);
+    }
+    @PostMapping("upload/{strid}/{logo}")
+    public ResponseEntity<String[]> uploadImage(@RequestParam("file")MultipartFile file, @PathVariable("strid") Long strid, @PathVariable("logo")String logo){
+        return structuresService.uploadLogoSociete(file,strid,logo);
     }
 }

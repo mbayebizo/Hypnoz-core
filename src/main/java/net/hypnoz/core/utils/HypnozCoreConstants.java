@@ -10,6 +10,7 @@ public class  HypnozCoreConstants {
     public static final String DEFAULT_DOC_SERVEUR_MODELS = "models";
     public static final String DEFAULT_DOC_SERVEUR_PIECES = "pieces";
     public static final String DEFAULT_DOC_SERVEUR_IMPRESSION = "impression";
+    public static final String DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO = "/image/logos/";
 
 
     public static final String PARAM_CONFIG_PATH = "CONFIG_PATH";

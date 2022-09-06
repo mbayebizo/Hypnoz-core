@@ -19,6 +19,6 @@ public class FormatText {
     }
 
     public static int getOrdre(String code) {
-        return  Integer.parseInt(code.replace("[^0-9]",""));
+        return  Integer.parseInt(code.replaceAll("[^0-9]",""));
     }
 }
