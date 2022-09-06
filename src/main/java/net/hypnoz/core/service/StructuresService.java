@@ -151,8 +151,9 @@ public class StructuresService {
         }
     }
 
-    public String uploadLogoSociete(MultipartFile file, Long strid, String logo){
+    public ResponseEntity<String[]> uploadLogoSociete(MultipartFile file, Long strid, String logo){
         String pathImage = OsUtils.getOsHomeDir();
+        String [] messages = new String[2];
         if (FilesUtils.existed(pathImage) && !FilesUtils.existed(pathImage + DEFAULT_DOC_SERVEUR_STRUCTURE + strid + DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO)) {
                 FilesUtils.mkdir(pathImage + DEFAULT_DOC_SERVEUR_STRUCTURE + strid + DEFAULT_DOC_SERVEUR_STRUCTURE_LOGO);
         }
@@ -164,9 +165,19 @@ public class StructuresService {
                 FilesUtils.deleteFile(rootLocation.toFile().getPath());
             }
             Files.copy(file.getInputStream(),rootLocation);
-            return rootLocation.toFile().getPath();
+            if(!rootLocation.toFile().getPath().isEmpty()){
+                String message = "Uploaded the file successfully: " ;
+                messages[0] =rootLocation.toFile().getPath();
+                messages[1] = message;
+                return  ResponseEntity.ok(messages);
+            }
+            String message = "Uploaded the file Failed: " ;
+            messages[1] = message;
+            return ResponseEntity.ok(messages);
         }catch (Exception e){
-            return  "";
+            String message = "Uploaded the file Failed: " ;
+            messages[1] = message;
+            return ResponseEntity.ok(messages);
         }
     }
 }
